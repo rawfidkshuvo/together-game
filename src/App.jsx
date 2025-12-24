@@ -44,6 +44,8 @@ import {
   ArrowRight,
   Gift,
   Hammer,
+  Loader,
+  Handshake,
 } from "lucide-react";
 
 // --- Firebase Config ---
@@ -62,6 +64,7 @@ const db = getFirestore(app);
 
 const APP_ID = typeof __app_id !== "undefined" ? __app_id : "together-game";
 const GAME_ID = "23";
+const LS_ROOM_KEY = "together_game_roomId";
 
 // --- Constants ---
 
@@ -552,6 +555,15 @@ const generateDeck = () => {
   }
   return shuffle(deck);
 };
+
+const Logo = () => (
+  <div className="flex items-center justify-center gap-1 opacity-40 mt-auto pb-2 pt-2 relative z-10">
+    <Handshake size={12} className="text-pink-600" />
+    <span className="text-[10px] font-black tracking-widest text-pink-600 uppercase">
+      TOGETHER
+    </span>
+  </div>
+);
 
 // --- VALIDATION ENGINE ---
 const validateGoal = (cards, goal) => {
@@ -1193,7 +1205,10 @@ export default function TogetherGame() {
   const [view, setView] = useState("menu");
   const [playerName, setPlayerName] = useState("");
   const [roomCodeInput, setRoomCodeInput] = useState("");
-  const [roomId, setRoomId] = useState("");
+  // Initialize roomId from localStorage if available to persist session
+  const [roomId, setRoomId] = useState(
+    () => localStorage.getItem(LS_ROOM_KEY) || ""
+  );
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState("");
   const [isMaintenance, setIsMaintenance] = useState(false);
@@ -1243,6 +1258,7 @@ export default function TogetherGame() {
           const data = snap.data();
           if (!data.players.some((p) => p.id === user.uid)) {
             setRoomId("");
+            localStorage.removeItem(LS_ROOM_KEY);
             setView("menu");
             setError("You were removed.");
             return;
@@ -1260,6 +1276,7 @@ export default function TogetherGame() {
           }
         } else {
           setRoomId("");
+          localStorage.removeItem(LS_ROOM_KEY);
           setView("menu");
           setError("Room ended.");
         }
@@ -1301,6 +1318,7 @@ export default function TogetherGame() {
       initialData
     );
     setRoomId(newId);
+    localStorage.setItem(LS_ROOM_KEY, newId);
     setView("lobby");
     setLoading(false);
   };
@@ -1344,6 +1362,7 @@ export default function TogetherGame() {
     ];
     await updateDoc(ref, { players: newPlayers });
     setRoomId(roomCodeInput);
+    localStorage.setItem(LS_ROOM_KEY, roomCodeInput);
     setLoading(false);
   };
 
@@ -1437,6 +1456,7 @@ export default function TogetherGame() {
       console.error("Error leaving room", e);
     }
     setRoomId("");
+    localStorage.removeItem(LS_ROOM_KEY);
     setView("menu");
     setGameState(null);
     setShowLeaveConfirm(false);
@@ -1769,13 +1789,6 @@ export default function TogetherGame() {
 
   // --- Render ---
 
-  const isMyTurn = gameState?.players[gameState.turnIndex]?.id === user?.uid;
-  const myPlayer = gameState?.players.find((p) => p.id === user?.uid);
-  const myTeam = TEAMS.find((t) => t.id === myPlayer?.teamId);
-  const partner = gameState?.players.find(
-    (p) => p.teamId === myPlayer?.teamId && p.id !== user?.uid
-  );
-
   if (isMaintenance) {
     return (
       <div className="min-h-screen bg-gray-950 flex flex-col items-center justify-center text-white p-4 text-center">
@@ -1789,20 +1802,22 @@ export default function TogetherGame() {
             The bond is broken. Take some time to rescue your friendship.
           </p>
         </div>
-        {/* Add Spacing Between Boxes */}
-        <div className="h-8"></div>
+      </div>
+    );
+  }
 
-        {/* Clickable Second Card */}
-        <a href="https://rawfidkshuvo.github.io/gamehub/">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <div className="text-center pb-12 animate-pulse">
-              <div className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900/50 rounded-full border border-indigo-500/20 text-indigo-300 font-bold tracking-widest text-sm uppercase backdrop-blur-sm">
-                <Sparkles size={16} /> Visit Gamehub...Try our other releases...{" "}
-                <Sparkles size={16} />
-              </div>
-            </div>
+  // RECONNECTING STATE
+  if (roomId && !gameState && !error) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white p-4">
+        <FloatingBackground />
+        <div className="bg-slate-900/80 backdrop-blur p-8 rounded-2xl border border-slate-700 shadow-2xl flex flex-col items-center gap-4 animate-in fade-in zoom-in duration-300">
+          <Loader size={48} className="text-pink-500 animate-spin" />
+          <div className="text-center">
+            <h2 className="text-xl font-bold">Reconnecting...</h2>
+            <p className="text-slate-400 text-sm">Resuming your session</p>
           </div>
-        </a>
+        </div>
       </div>
     );
   }
@@ -2090,6 +2105,14 @@ export default function TogetherGame() {
     );
   }
 
+  // Common UI check for non-menu views
+  const isMyTurn = gameState?.players[gameState.turnIndex]?.id === user?.uid;
+  const myPlayer = gameState?.players.find((p) => p.id === user?.uid);
+  const myTeam = TEAMS.find((t) => t.id === myPlayer?.teamId);
+  const partner = gameState?.players.find(
+    (p) => p.teamId === myPlayer?.teamId && p.id !== user?.uid
+  );
+
   if (view === "lobby" && gameState) {
     const isHost = gameState.hostId === user.uid;
     const count = gameState.players.length;
@@ -2221,6 +2244,7 @@ export default function TogetherGame() {
             </div>
           )}
         </div>
+        <Logo />
       </div>
     );
   }
@@ -2958,6 +2982,7 @@ export default function TogetherGame() {
             </div>
           </div>
         </div>
+        <Logo />
       </div>
     );
   }
