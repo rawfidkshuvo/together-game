@@ -661,17 +661,26 @@ const validateGoal = (cards, goal) => {
       }
       return false;
     case "COLOR_SPLIT_RUN":
+      // 1. Must be exactly 4 cards
       if (cards.length !== 4) return false;
-      for (let i = 0; i < vals.length - 1; i++)
+
+      // 2. Must be a sequential run (e.g., 4,5,6,7)
+      // Note: vals is already sorted in the main function scope
+      for (let i = 0; i < vals.length - 1; i++) {
         if (vals[i] + 1 !== vals[i + 1]) return false;
-      // Sort cards by value to check sequence color
+      }
+
+      // 3. Sort cards explicitly by value to check color order
+      // (We sort the card objects themselves, not just values)
       const sortedCards = [...cards].sort((a, b) => a.value - b.value);
-      const c1 = sortedCards[0].color;
-      const c2 = sortedCards[1].color;
-      const c3 = sortedCards[2].color;
-      const c4 = sortedCards[3].color;
-      // LLMM or MMLL?
-      // Prompt "first two are Blue and next two are Magenta". Strict.
+
+      // 4. Check Colors: Lowest 2 must be Lemon (L), Highest 2 must be Magenta (M)
+      const c1 = sortedCards[0].color; // Lowest card
+      const c2 = sortedCards[1].color; // 2nd Lowest
+      const c3 = sortedCards[2].color; // 2nd Highest
+      const c4 = sortedCards[3].color; // Highest card
+
+      // REMOVED INVALID "Prompt..." LINE HERE
       return c1 === "L" && c2 === "L" && c3 === "M" && c4 === "M";
     case "SPECIFIC_PAIRS": // High Pairs / Max Min
       if (cards.length !== 4) return false;
