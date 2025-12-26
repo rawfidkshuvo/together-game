@@ -2035,7 +2035,7 @@ export default function TogetherGame() {
               TOGETHER
             </h1>
             <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">
-              A Cooperative Duos Game
+              UNITED WE STAND
             </p>
           </div>
 
@@ -2100,6 +2100,20 @@ export default function TogetherGame() {
           >
             <BookOpen size={16} /> How to Play
           </button>
+        </div>
+        <div className="absolute bottom-4 text-slate-600 text-xs text-center">
+          Inspired by Duos. A tribute game.
+          <br />
+          Developed by <strong>RAWFID K SHUVO</strong>. Visit{" "}
+          <a
+            href="https://rawfidkshuvo.github.io/gamehub/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-pink-500 underline hover:text-pink-600"
+          >
+            GAMEHUB
+          </a>{" "}
+          for more games.
         </div>
       </div>
     );
