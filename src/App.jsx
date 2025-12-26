@@ -124,7 +124,7 @@ const GOAL_DB = [
     points: 2,
     type: "RUN",
     count: 3,
-    desc: "Three cards of sequential rank (e.g., 5, 6, 7), any color.",
+    desc: "Collect any 3 sequential cards (e.g., 5, 6, 7). Colors can be mixed.",
   },
   {
     id: "run_4_col",
@@ -133,7 +133,7 @@ const GOAL_DB = [
     type: "RUN",
     count: 4,
     sameColor: true,
-    desc: "Four sequential cards, all Lemon or all Magenta.",
+    desc: "Collect 4 sequential cards that share the same color (all Lemon or all Magenta).",
   },
   {
     id: "run_5",
@@ -141,7 +141,7 @@ const GOAL_DB = [
     points: 4,
     type: "RUN",
     count: 5,
-    desc: "Five cards of sequential rank (e.g., 1, 2, 3, 4, 5), any color.",
+    desc: "Collect any 5 sequential cards (e.g., 2, 3, 4, 5, 6). Colors can be mixed.",
   },
   {
     id: "run_low",
@@ -149,7 +149,7 @@ const GOAL_DB = [
     points: 3,
     type: "EXACT_SEQ",
     seq: [1, 2, 3, 4],
-    desc: "The sequence 1, 2, 3, 4, any color.",
+    desc: "Collect the exact sequence 1, 2, 3, 4. Colors can be mixed.",
   },
   {
     id: "run_high",
@@ -157,7 +157,7 @@ const GOAL_DB = [
     points: 3,
     type: "EXACT_SEQ",
     seq: [5, 6, 7, 8],
-    desc: "The sequence 5, 6, 7, 8, any color.",
+    desc: "Collect the exact sequence 5, 6, 7, 8. Colors can be mixed.",
   },
   {
     id: "run_3_blue",
@@ -166,7 +166,7 @@ const GOAL_DB = [
     type: "RUN",
     count: 3,
     specificColor: "L",
-    desc: "Three consecutive Lemon cards.",
+    desc: "Collect 3 sequential cards that are all Lemon.",
   },
   {
     id: "run_odd",
@@ -174,7 +174,7 @@ const GOAL_DB = [
     points: 4,
     type: "EXACT_SEQ",
     seq: [3, 5, 7],
-    desc: "The sequence 3, 5, 7, any color.",
+    desc: "Collect the exact sequence 3, 5, 7. Colors can be mixed.",
   },
 
   // II. Sets
@@ -184,7 +184,7 @@ const GOAL_DB = [
     points: 2,
     type: "SET",
     count: 3,
-    desc: "Three cards of the same rank, any color.",
+    desc: "Collect 3 cards of the same number. Colors can be mixed.",
   },
   {
     id: "set_4",
@@ -192,21 +192,21 @@ const GOAL_DB = [
     points: 4,
     type: "SET",
     count: 4,
-    desc: "Four cards of the same rank, any color.",
+    desc: "Collect 4 cards of the same number. Colors can be mixed.",
   },
   {
     id: "two_pairs",
     text: "Two Pairs",
     points: 3,
     type: "TWO_PAIRS",
-    desc: "Two sets of cards with matching ranks (e.g., two 3s and two 8s), any color.",
+    desc: "Collect two pairs of numbers (e.g., two 3s and two 8s). Colors can be mixed.",
   },
   {
     id: "full_house",
     text: "Full House",
     points: 4,
     type: "FULL_HOUSE",
-    desc: "A Set of 3 and a Pair (e.g., three 5s and two 8s), any color.",
+    desc: "Collect a Set of 3 plus a Pair (e.g., three 5s and two 8s).",
   },
   {
     id: "set_odd",
@@ -215,7 +215,7 @@ const GOAL_DB = [
     type: "SET_PARITY",
     count: 3,
     parity: "ODD",
-    desc: "Three cards of the same odd rank (1, 3, 5, or 7).",
+    desc: "Collect 3 cards of the same number, where that number is Odd (1, 3, 5, or 7).",
   },
   {
     id: "set_even",
@@ -224,7 +224,7 @@ const GOAL_DB = [
     type: "SET_PARITY",
     count: 3,
     parity: "EVEN",
-    desc: "Three cards of the same even rank (2, 4, 6, or 8).",
+    desc: "Collect 3 cards of the same number, where that number is Even (2, 4, 6, or 8).",
   },
   {
     id: "set_4_8s",
@@ -233,7 +233,7 @@ const GOAL_DB = [
     type: "EXACT_SET",
     val: 8,
     count: 4,
-    desc: "Four cards all with the rank 8.",
+    desc: "Collect four cards showing the number 8.",
   },
   {
     id: "pair_1s",
@@ -242,7 +242,7 @@ const GOAL_DB = [
     type: "EXACT_SET",
     val: 1,
     count: 2,
-    desc: "A Pair of rank 1 cards.",
+    desc: "Collect two cards showing the number 1.",
   },
   {
     id: "set_6s",
@@ -251,7 +251,7 @@ const GOAL_DB = [
     type: "EXACT_SET",
     val: 6,
     count: 3,
-    desc: "Three cards all with the rank 6.",
+    desc: "Collect three cards showing the number 6.",
   },
 
   // III. Color & Parity
@@ -263,7 +263,7 @@ const GOAL_DB = [
     count: 4,
     color: "L",
     parity: "ODD",
-    desc: "Four Lemon cards, all with odd ranks (1, 3, 5, or 7).",
+    desc: "Collect 4 Lemon cards that are all Odd numbers (1, 3, 5, or 7).",
   },
   {
     id: "mag_evens",
@@ -273,7 +273,7 @@ const GOAL_DB = [
     count: 4,
     color: "M",
     parity: "EVEN",
-    desc: "Four Magenta cards, all with even ranks (2, 4, 6, or 8).",
+    desc: "Collect 4 Magenta cards that are all Even numbers (2, 4, 6, or 8).",
   },
   {
     id: "blue_low",
@@ -283,7 +283,7 @@ const GOAL_DB = [
     count: 4,
     color: "L",
     max: 4,
-    desc: "Four Lemon cards, all rank 4 or lower (1, 2, 3, 4).",
+    desc: "Collect 4 Lemon cards with numbers 4 or lower.",
   },
   {
     id: "mag_high",
@@ -293,28 +293,28 @@ const GOAL_DB = [
     count: 4,
     color: "M",
     min: 5,
-    desc: "Four Magenta cards, all rank 5 or higher (5, 6, 7, 8).",
+    desc: "Collect 4 Magenta cards with numbers 5 or higher.",
   },
   {
     id: "odd_colors",
     text: "Odd Colors",
     points: 3,
     type: "ODD_COLORS",
-    desc: "Two Odd-ranked cards, one Lemon and one Magenta.",
+    desc: "Collect two Odd-numbered cards: one must be Lemon and one Magenta.",
   },
   {
     id: "all_four_7s",
     text: "All Four 7s",
     points: 5,
     type: "ALL_FOUR_7S",
-    desc: "Four cards all with the rank 7, one of each color type (2 Lemon, 2 Magenta).",
+    desc: "Collect four 7s: two must be Lemon and two must be Magenta.",
   },
   {
     id: "mixed_pair",
     text: "Mixed Pairs",
     points: 4,
     type: "MIXED_PAIRS",
-    desc: "A Lemon pair and a Magenta pair (e.g., L-5, L-5, M-2, M-2).",
+    desc: "Collect one Pair of Lemon cards and one Pair of Magenta cards.",
   },
   {
     id: "pure_blue",
@@ -323,7 +323,7 @@ const GOAL_DB = [
     type: "PURE_COLOR",
     count: 5,
     color: "L",
-    desc: "Five cards, all Lemon, any rank.",
+    desc: "Collect any 5 Lemon cards, regardless of number.",
   },
   {
     id: "pure_mag",
@@ -332,7 +332,7 @@ const GOAL_DB = [
     type: "PURE_COLOR",
     count: 5,
     color: "M",
-    desc: "Five cards, all Magenta, any rank.",
+    desc: "Collect any 5 Magenta cards, regardless of number.",
   },
   {
     id: "even_blues",
@@ -342,7 +342,7 @@ const GOAL_DB = [
     count: 3,
     color: "L",
     parity: "EVEN",
-    desc: "Three Lemon cards, all with even rank.",
+    desc: "Collect 3 Lemon cards that are all Even numbers.",
   },
   {
     id: "odd_magentas",
@@ -352,7 +352,7 @@ const GOAL_DB = [
     count: 3,
     color: "M",
     parity: "ODD",
-    desc: "Three Magenta cards, all with odd rank.",
+    desc: "Collect 3 Magenta cards that are all Odd numbers.",
   },
 
   // IV. Sums
@@ -363,7 +363,7 @@ const GOAL_DB = [
     type: "SUM",
     count: 3,
     target: 18,
-    desc: "Three cards whose ranks sum exactly to 18 (e.g., 4, 6, 8).",
+    desc: "Collect 3 cards that add up to exactly 18.",
   },
   {
     id: "sum_25_4",
@@ -372,7 +372,7 @@ const GOAL_DB = [
     type: "SUM",
     count: 4,
     target: 25,
-    desc: "Four cards whose ranks sum exactly to 25.",
+    desc: "Collect 4 cards that add up to exactly 25.",
   },
   {
     id: "sum_10_blue",
@@ -382,7 +382,7 @@ const GOAL_DB = [
     count: 3,
     target: 10,
     color: "L",
-    desc: "Three Lemon cards whose ranks sum exactly to 10.",
+    desc: "Collect 3 Lemon cards that add up to exactly 10.",
   },
   {
     id: "sum_20_mag",
@@ -392,7 +392,7 @@ const GOAL_DB = [
     count: 3,
     target: 20,
     color: "M",
-    desc: "Three Magenta cards whose ranks sum exactly to 20.",
+    desc: "Collect 3 Magenta cards that add up to exactly 20.",
   },
   {
     id: "even_sum_14",
@@ -402,7 +402,7 @@ const GOAL_DB = [
     count: 3,
     target: 14,
     parity: "EVEN",
-    desc: "Three even-ranked cards that sum to 14 (e.g., 2, 4, 8).",
+    desc: "Collect 3 Even-numbered cards that add up to exactly 14.",
   },
   {
     id: "odd_sum_15",
@@ -412,14 +412,14 @@ const GOAL_DB = [
     count: 3,
     target: 15,
     parity: "ODD",
-    desc: "Three odd-ranked cards that sum to 15 (e.g., 3, 5, 7).",
+    desc: "Collect 3 Odd-numbered cards that add up to exactly 15.",
   },
   {
     id: "doubler",
     text: "Doubler (Any)",
     points: 4,
     type: "DOUBLER_SUM",
-    desc: "Three cards: Two of the same color sum to the rank of the third card.",
+    desc: "Collect 3 cards where two of the same color add up to the number on the third card.",
   },
   {
     id: "sum_12_tri",
@@ -428,7 +428,7 @@ const GOAL_DB = [
     type: "SUM_DIFF",
     count: 3,
     target: 12,
-    desc: "Three cards of different ranks that all sum to 12.",
+    desc: "Collect 3 cards with different numbers that add up to exactly 12.",
   },
   {
     id: "four_sum_28",
@@ -437,7 +437,7 @@ const GOAL_DB = [
     type: "EXACT_SET",
     val: 7,
     count: 4,
-    desc: "Four cards all with rank 7 (Sum of 28).",
+    desc: "Collect four cards that add up to 28 (Requires four 7s).",
   },
   {
     id: "low_sum_6",
@@ -446,14 +446,14 @@ const GOAL_DB = [
     type: "SUM",
     count: 3,
     target: 6,
-    desc: "Three cards whose ranks sum exactly to 6 (e.g., 1+2+3).",
+    desc: "Collect 3 cards that add up to exactly 6.",
   },
   {
     id: "arith_pair",
     text: "Arithmetic Pair",
     points: 4,
     type: "ARITHMETIC_PAIR",
-    desc: "A Lemon X and a Magenta Y where Y = X+3.",
+    desc: "Collect a Lemon card (X) and a Magenta card (Y) where Y is exactly 3 more than X.",
   },
   {
     id: "arith_trip",
@@ -461,7 +461,7 @@ const GOAL_DB = [
     points: 3,
     type: "RUN",
     count: 3,
-    desc: "Three cards with ranks X, X+1, and X+2.",
+    desc: "Collect any 3 sequential cards (e.g., 2, 3, 4). Colors can be mixed.",
   },
 
   // V. Advanced
@@ -470,7 +470,7 @@ const GOAL_DB = [
     text: "Color Run 4",
     points: 5,
     type: "COLOR_SPLIT_RUN",
-    desc: "A Run of 4, where the first two are Lemon and the next two are Magenta.",
+    desc: "Collect a run of 4 cards: the lower two must be Lemon and the higher two Magenta.",
   },
   {
     id: "odd_full_house_blue",
@@ -479,7 +479,7 @@ const GOAL_DB = [
     type: "FULL_HOUSE_COLOR_PARITY",
     color: "L",
     parity: "ODD",
-    desc: "A Full House where all 5 cards are Lemon and have an odd rank.",
+    desc: "Collect a Full House (Set of 3 + Pair) using only Odd-numbered Lemon cards.",
   },
   {
     id: "high_pairs",
@@ -487,7 +487,7 @@ const GOAL_DB = [
     points: 5,
     type: "SPECIFIC_PAIRS",
     vals: [7, 8],
-    desc: "A pair of 7s and a pair of 8s, any color.",
+    desc: "Collect a pair of 7s and a pair of 8s.",
   },
   {
     id: "blue_even_run",
@@ -496,7 +496,7 @@ const GOAL_DB = [
     type: "RUN_COLOR_PARITY",
     color: "L",
     parity: "EVEN",
-    desc: "Three Lemon cards with sequential even ranks (2, 4, 6 or 4, 6, 8).",
+    desc: "Collect 3 Lemon cards that form an Even sequence (2, 4, 6 or 4, 6, 8).",
   },
   {
     id: "mag_odd_set",
@@ -506,7 +506,7 @@ const GOAL_DB = [
     count: 3,
     parity: "ODD",
     color: "M",
-    desc: "Three odd-ranked cards, all Magenta.",
+    desc: "Collect 3 Magenta cards of the same Odd number.",
   },
   {
     id: "max_min",
@@ -514,7 +514,7 @@ const GOAL_DB = [
     points: 6,
     type: "SPECIFIC_PAIRS",
     vals: [1, 8],
-    desc: "A pair of 1s and a pair of 8s, any color.",
+    desc: "Collect a pair of 1s and a pair of 8s.",
   },
   {
     id: "tri_color_set_3",
@@ -524,7 +524,7 @@ const GOAL_DB = [
     val: 3,
     countL: 2,
     countM: 1,
-    desc: "Three cards of rank 3, two Lemon and one Magenta.",
+    desc: "Collect three 3s: exactly two must be Lemon and one must be Magenta.",
   },
 ];
 
