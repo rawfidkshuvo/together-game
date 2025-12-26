@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -569,9 +569,9 @@ const Logo = () => (
 const validateGoal = (cards, goal) => {
   if (!cards || cards.length === 0) return false;
   const vals = cards.map((c) => c.value).sort((a, b) => a - b);
-  const colors = cards.map((c) => c.color); // M or L
+  const colors = cards.map((c) => c.color);
+  // M or L
   const sum = vals.reduce((a, b) => a + b, 0);
-
   switch (goal.type) {
     case "RUN":
       if (cards.length !== goal.count) return false;
@@ -581,20 +581,16 @@ const validateGoal = (cards, goal) => {
       if (goal.specificColor && !colors.every((c) => c === goal.specificColor))
         return false;
       return true;
-
     case "EXACT_SEQ":
       if (cards.length !== goal.seq.length) return false;
       return vals.every((v, i) => v === goal.seq[i]);
-
     case "SET":
       if (cards.length !== goal.count) return false;
       return vals.every((v) => v === vals[0]);
-
     case "TWO_PAIRS":
       if (cards.length !== 4) return false;
       // vals sorted: x,x, y,y
       return vals[0] === vals[1] && vals[2] === vals[3] && vals[1] !== vals[2];
-
     case "FULL_HOUSE":
       if (cards.length !== 5) return false;
       // x,x,x,y,y OR x,x,y,y,y
@@ -606,25 +602,21 @@ const validateGoal = (cards, goal) => {
       if (cards.length !== goal.count) return false;
       if (!vals.every((v) => v === vals[0])) return false;
       return goal.parity === "ODD" ? vals[0] % 2 !== 0 : vals[0] % 2 === 0;
-
     case "EXACT_SET":
       if (cards.length !== goal.count) return false;
       return vals.every((v) => v === goal.val);
-
     case "COLOR_PARITY":
       if (cards.length !== goal.count) return false;
       if (!colors.every((c) => c === goal.color)) return false;
       return goal.parity === "ODD"
         ? vals.every((v) => v % 2 !== 0)
         : vals.every((v) => v % 2 === 0);
-
     case "COLOR_RANGE":
       if (cards.length !== goal.count) return false;
       if (!colors.every((c) => c === goal.color)) return false;
       if (goal.max) return vals.every((v) => v <= goal.max);
       if (goal.min) return vals.every((v) => v >= goal.min);
       return false;
-
     case "MIXED_PAIRS":
       if (cards.length !== 4) return false;
       // Need 1 Lemon Pair and 1 Magenta Pair
@@ -633,37 +625,29 @@ const validateGoal = (cards, goal) => {
       if (lemons.length !== 2 || magentas.length !== 2) return false;
       // Check pairs: since sorted by val doesn't sort by color, we filter
       return lemons[0] === lemons[1] && magentas[0] === magentas[1];
-
     case "PURE_COLOR":
       if (cards.length !== goal.count) return false;
       return colors.every((c) => c === goal.color);
-
     case "SUM":
       if (cards.length !== goal.count) return false;
       return sum === goal.target;
-
     case "SUM_COLOR":
       if (cards.length !== goal.count) return false;
       if (!colors.every((c) => c === goal.color)) return false;
       return sum === goal.target;
-
     case "SUM_PARITY":
       if (cards.length !== goal.count) return false;
       if (sum !== goal.target) return false;
       const isOdd = goal.parity === "ODD";
       return vals.every((v) => (v % 2 !== 0) === isOdd);
-
     case "SUM_DIFF":
       if (cards.length !== goal.count) return false;
       if (sum !== goal.target) return false;
       // All must be different
       return new Set(vals).size === vals.length;
-
     case "DOUBLER_SUM":
       if (cards.length !== 3) return false;
       // Two cards of same color sum to rank of third.
-      // We need to check permutations or logic
-      // Simplest: Check if any 2 same-color cards sum to the 3rd card
       // cards = [A, B, C]
       for (let i = 0; i < 3; i++) {
         const target = cards[i];
@@ -676,7 +660,6 @@ const validateGoal = (cards, goal) => {
         }
       }
       return false;
-
     case "COLOR_SPLIT_RUN":
       if (cards.length !== 4) return false;
       for (let i = 0; i < vals.length - 1; i++)
@@ -687,9 +670,9 @@ const validateGoal = (cards, goal) => {
       const c2 = sortedCards[1].color;
       const c3 = sortedCards[2].color;
       const c4 = sortedCards[3].color;
-      // LLMM or MMLL? Prompt "first two are Blue and next two are Magenta". Strict.
+      // LLMM or MMLL?
+      // Prompt "first two are Blue and next two are Magenta". Strict.
       return c1 === "L" && c2 === "L" && c3 === "M" && c4 === "M";
-
     case "SPECIFIC_PAIRS": // High Pairs / Max Min
       if (cards.length !== 4) return false;
       // vals sorted x,x,y,y
@@ -698,16 +681,15 @@ const validateGoal = (cards, goal) => {
 
     case "ODD_COLORS":
       if (cards.length !== 2) return false;
-      if (vals.some((v) => v % 2 === 0)) return false; // Must be odd
+      if (vals.some((v) => v % 2 === 0)) return false;
+      // Must be odd
       return colors.includes("L") && colors.includes("M");
-
     case "ALL_FOUR_7S":
       if (cards.length !== 4) return false;
       if (!vals.every((v) => v === 7)) return false;
       const cL = colors.filter((c) => c === "L").length;
       const cM = colors.filter((c) => c === "M").length;
       return cL === 2 && cM === 2;
-
     case "ARITHMETIC_PAIR":
       if (cards.length !== 2) return false;
       // L and M, Y = X+3 where Y is M and X is L
@@ -715,7 +697,6 @@ const validateGoal = (cards, goal) => {
       const cardM = cards.find((c) => c.color === "M");
       if (!cardL || !cardM) return false;
       return cardM.value === cardL.value + 3;
-
     case "FULL_HOUSE_COLOR_PARITY":
       if (cards.length !== 5) return false;
       if (!colors.every((c) => c === goal.color)) return false;
@@ -727,7 +708,6 @@ const validateGoal = (cards, goal) => {
       return (
         (countA2 === 3 && countB2 === 2) || (countA2 === 2 && countB2 === 3)
       );
-
     case "RUN_COLOR_PARITY": // Lemon-Even Run (2,4,6 etc)
       if (cards.length !== 3) return false;
       if (!colors.every((c) => c === goal.color)) return false;
@@ -735,21 +715,18 @@ const validateGoal = (cards, goal) => {
       if (!vals.every((v) => (v % 2 !== 0) === isOddRun)) return false;
       // Check gap of 2
       return vals[1] === vals[0] + 2 && vals[2] === vals[1] + 2;
-
     case "SET_PARITY_COLOR":
       if (cards.length !== goal.count) return false;
       if (!colors.every((c) => c === goal.color)) return false;
       if (!vals.every((v) => v === vals[0])) return false;
       const isOddSet = goal.parity === "ODD";
       return (vals[0] % 2 !== 0) === isOddSet;
-
     case "SPECIFIC_SET_MIXED": // Tri-Color Set (3s)
       if (cards.length !== 3) return false;
       if (!vals.every((v) => v === goal.val)) return false;
       const countL_S = colors.filter((c) => c === "L").length;
       const countM_S = colors.filter((c) => c === "M").length;
       return countL_S === goal.countL && countM_S === goal.countM;
-
     default:
       return false;
   }
@@ -767,7 +744,6 @@ const FloatingBackground = () => (
 
 const EventModal = ({ event, onClose, currentUserId }) => {
   if (!event) return null;
-
   const { type, actorName, data, actorId, targetId } = event;
   const isTeammate = currentUserId === targetId;
   const isActor = currentUserId === actorId;
@@ -779,7 +755,6 @@ const EventModal = ({ event, onClose, currentUserId }) => {
   let content = null;
   let title = "";
   let icon = null;
-
   switch (type) {
     case "GOAL_CHANGE":
       title = "Goal Changed";
@@ -808,7 +783,6 @@ const EventModal = ({ event, onClose, currentUserId }) => {
         </div>
       );
       break;
-
     case "GOAL_CLAIM":
       title = "Goal Completed!";
       icon = <Trophy className="text-yellow-400" size={32} />;
@@ -991,7 +965,6 @@ const ReportCard = ({ completedGoals, onClose }) => {
   const sortedGoals = [...completedGoals].sort((a, b) =>
     a.teamId.localeCompare(b.teamId)
   );
-
   return (
     <div className="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
@@ -1079,9 +1052,7 @@ const Card = ({ card, onClick, selected, small, disabled, tiny }) => {
         }`}
       ></div>
     );
-
   const theme = card.color === "M" ? COLORS.MAGENTA : COLORS.LEMON;
-
   if (tiny) {
     return (
       <div
@@ -1212,7 +1183,6 @@ export default function TogetherGame() {
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState("");
   const [isMaintenance, setIsMaintenance] = useState(false);
-
   // Local UI State
   const [selectedCards, setSelectedCards] = useState([]);
   const [showLogs, setShowLogs] = useState(false);
@@ -1221,10 +1191,13 @@ export default function TogetherGame() {
   const [showReport, setShowReport] = useState(false);
   const [loading, setLoading] = useState(false);
   const [viewingGoal, setViewingGoal] = useState(null);
-
   // Event Modal State
   const [activeEvent, setActiveEvent] = useState(null);
   const [lastProcessedEventId, setLastProcessedEventId] = useState(0);
+
+  // --- NEW STATE: Context Menu Control ---
+  const [activeGoalMenu, setActiveGoalMenu] = useState(null); // 'PERSONAL' | 'PUBLIC' | null
+  const [activePartnerId, setActivePartnerId] = useState(null); // ID of partner clicked
 
   // Auth Init
   useEffect(() => {
@@ -1383,23 +1356,26 @@ export default function TogetherGame() {
       p.score = 0;
       p.ready = false;
     });
-
     const deck = generateDeck();
     const goalDeck = shuffle([...GOAL_DB, ...GOAL_DB, ...GOAL_DB]);
     const market = [deck.pop(), deck.pop(), deck.pop()];
     const publicGoal = goalDeck.pop();
-
     players.forEach((p, i) => {
       const count = i === 0 ? 1 : i === 1 ? 2 : 3;
       for (let k = 0; k < count; k++) p.hand.push(deck.pop());
       p.personalGoal = goalDeck.pop();
     });
-
     // Initialize teamScores only for active teams
     const initialTeamScores = {};
     teamsInPlay.forEach((tid) => {
       initialTeamScores[tid] = { goals: 0, points: 0 };
     });
+
+    // CHANGE: logic for turnPhase
+    // First player checks limit if applicable, otherwise PLAYING (flexible order)
+    const firstPlayer = players[0];
+    const initialPhase =
+      firstPlayer.hand.length > 6 ? "CHECK_LIMIT" : "PLAYING";
 
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
@@ -1411,7 +1387,7 @@ export default function TogetherGame() {
         goalDeck,
         publicGoal,
         turnIndex: 0,
-        turnPhase: players[0].hand.length > 6 ? "CHECK_LIMIT" : "DRAW",
+        turnPhase: initialPhase, // Set based on hand size
         cardsDrawn: 0,
         tradesPerformed: 0,
         goalChanged: false,
@@ -1515,15 +1491,16 @@ export default function TogetherGame() {
     // RECYCLE: Add discarded card to bottom of deck (beginning of array if we pop from end)
     updates[`deck`] = [card, ...gameState.deck];
 
+    // CHANGE: If hand is valid, go to PLAYING
     if (newHand.length <= 6) {
-      updates.turnPhase = "DRAW";
+      updates.turnPhase = "PLAYING";
     }
+
     updates.logs = arrayUnion({
       id: Date.now(),
       text: `${p.name} discarded a card (Recycled).`,
       type: "neutral",
     });
-
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
       updates
@@ -1531,7 +1508,11 @@ export default function TogetherGame() {
   };
 
   const handleDraw = async (sourceIdx) => {
-    if (gameState.cardsDrawn >= 2) return;
+    // CHANGE: Check if max drawn
+    if (gameState.cardsDrawn >= 2) {
+      alert("You have already drawn 2 cards this turn.");
+      return;
+    }
 
     const pIndex = gameState.players.findIndex((p) => p.id === user.uid);
     const p = gameState.players[pIndex];
@@ -1541,7 +1522,6 @@ export default function TogetherGame() {
       deck: [...gameState.deck],
       market: [...gameState.market],
     };
-
     if (sourceIdx === -1) {
       card = updates.deck.pop();
     } else {
@@ -1553,7 +1533,6 @@ export default function TogetherGame() {
     updates.players[pIndex].hand.push(card);
     const newCount = gameState.cardsDrawn + 1;
     updates.cardsDrawn = newCount;
-
     let msg =
       sourceIdx === -1 ? "drew from deck" : `took ${card.value} from market`;
     updates.logs = arrayUnion({
@@ -1562,9 +1541,9 @@ export default function TogetherGame() {
       type: "neutral",
     });
 
-    if (newCount >= 2) {
-      updates.turnPhase = "ACTION";
-    }
+    // CHANGE: Do NOT auto switch phase. Stay in PLAYING.
+    // If we were in PLAYING, we stay there.
+    // If we were in CHECK_LIMIT (shouldn't happen because draw is disabled then), logic handles it.
 
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
@@ -1585,7 +1564,6 @@ export default function TogetherGame() {
       goalDeck: [...gameState.goalDeck],
       publicGoal: gameState.publicGoal,
     };
-
     let oldGoal;
     let newGoal;
     if (type === "PERSONAL") {
@@ -1610,7 +1588,6 @@ export default function TogetherGame() {
       } Goal.`,
       type: "neutral",
     });
-
     // EVENT MODAL UPDATE
     updates.lastEvent = {
       id: Date.now(),
@@ -1623,7 +1600,6 @@ export default function TogetherGame() {
         goalType: type,
       },
     };
-
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
       updates
@@ -1635,7 +1611,6 @@ export default function TogetherGame() {
     const p = gameState.players[pIndex];
     const goal =
       targetType === "PERSONAL" ? p.personalGoal : gameState.publicGoal;
-
     if (!validateGoal(selectedCards, goal)) {
       alert("Invalid selection for this goal!");
       return;
@@ -1647,12 +1622,10 @@ export default function TogetherGame() {
       teamScores: { ...gameState.teamScores },
       deck: [...gameState.deck],
     };
-
     const usedIds = selectedCards.map((c) => c.id);
     updates.players[pIndex].hand = p.hand.filter(
       (c) => !usedIds.includes(c.id)
     );
-
     // RECYCLE: Used cards go to bottom of deck
     updates.deck = [...selectedCards, ...updates.deck];
 
@@ -1688,7 +1661,6 @@ export default function TogetherGame() {
     }
 
     updates.logs = arrayUnion({ id: Date.now(), text: logText, type: logType });
-
     // EVENT MODAL UPDATE
     updates.lastEvent = {
       id: Date.now(),
@@ -1701,7 +1673,6 @@ export default function TogetherGame() {
         goalType: targetType,
       },
     };
-
     setSelectedCards([]);
 
     await updateDoc(
@@ -1729,7 +1700,6 @@ export default function TogetherGame() {
     const partner = gameState.players[partnerIdx];
 
     const updates = { players: [...gameState.players] };
-
     const tradeIds = selectedCards.map((c) => c.id);
     updates.players[pIndex].hand = updates.players[pIndex].hand.filter(
       (c) => !tradeIds.includes(c.id)
@@ -1742,7 +1712,6 @@ export default function TogetherGame() {
       text: `${gameState.players[pIndex].name} gave ${selectedCards.length} card(s) to ${gameState.players[partnerIdx].name}.`,
       type: "neutral",
     });
-
     // EVENT MODAL UPDATE
     updates.lastEvent = {
       id: Date.now(),
@@ -1759,6 +1728,9 @@ export default function TogetherGame() {
     };
 
     setSelectedCards([]);
+    // Close context menu if open
+    setActivePartnerId(null);
+
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
       updates
@@ -1766,9 +1738,17 @@ export default function TogetherGame() {
   };
 
   const endTurn = async () => {
+    // CHANGE: Strict check before passing
+    if (gameState.cardsDrawn < 2) {
+      alert("You must draw 2 cards before passing your turn.");
+      return;
+    }
+
     const nextIndex = (gameState.turnIndex + 1) % gameState.players.length;
     const nextPlayer = gameState.players[nextIndex];
-    const nextPhase = nextPlayer.hand.length > 6 ? "CHECK_LIMIT" : "DRAW";
+
+    // CHANGE: Next phase logic
+    const nextPhase = nextPlayer.hand.length > 6 ? "CHECK_LIMIT" : "PLAYING";
 
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
@@ -1850,7 +1830,8 @@ export default function TogetherGame() {
               </div>
 
               <div className="p-8 space-y-10 text-slate-300">
-                {/* Section 1: Introduction */}
+                [cite_start]
+                {/* Section 1: Introduction [cite: 296, 297, 298, 299, 300, 301, 302, 303, 304, 305] */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-3 flex items-center gap-2">
@@ -1880,10 +1861,8 @@ export default function TogetherGame() {
                     </div>
                   </div>
                 </section>
-
                 <hr className="border-slate-800" />
-
-                {/* Section 2: Turn Structure */}
+                {/* Section 2: Turn Structure - UPDATED TEXT FOR FLEXIBLE TURNS */}
                 <section>
                   <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                     <RotateCcw className="text-blue-400" /> Turn Structure
@@ -1911,12 +1890,11 @@ export default function TogetherGame() {
                         2
                       </div>
                       <h4 className="font-bold text-white text-lg mb-2">
-                        Draw (Mandatory)
+                        Actions (Any Order)
                       </h4>
                       <p className="text-sm">
-                        You <strong>MUST draw 2 cards</strong>. You can take
-                        from the face-up Market or the blind Deck in any
-                        combination.
+                        You can Draw, Trade, or Claim goals in any order. BUT
+                        you <strong>MUST draw 2 cards</strong> before passing.
                       </p>
                     </div>
 
@@ -1926,19 +1904,18 @@ export default function TogetherGame() {
                         3
                       </div>
                       <h4 className="font-bold text-white text-lg mb-2">
-                        Actions
+                        Pass
                       </h4>
                       <p className="text-sm">
-                        Perform any number of actions (Trade, Claim Goal, etc.)
-                        until you are ready to <strong>Pass</strong> the turn.
+                        Once you have drawn your 2 cards and finished your
+                        moves, <strong>Pass</strong> the turn.
                       </p>
                     </div>
                   </div>
                 </section>
-
                 <hr className="border-slate-800" />
-
-                {/* Section 3: Actions */}
+                [cite_start]
+                {/* Section 3: Actions [cite: 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333] */}
                 <section>
                   <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                     <Zap className="text-yellow-400" /> Valid Actions
@@ -1994,8 +1971,8 @@ export default function TogetherGame() {
                     </div>
                   </div>
                 </section>
-
-                {/* Section 4: Communication */}
+                [cite_start]
+                {/* Section 4: Communication [cite: 334, 335, 336, 337] */}
                 <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex gap-4 items-center">
                   <div className="bg-red-500/20 p-2 rounded-full text-red-400">
                     <AlertTriangle size={24} />
@@ -2382,8 +2359,79 @@ export default function TogetherGame() {
       );
     }
 
+    // --- HELPER FOR GOAL OVERLAY ---
+    const GoalOverlay = ({ type, goal }) => (
+      <div
+        className="absolute inset-0 bg-slate-900/90 backdrop-blur-sm z-30 flex flex-col items-center justify-center gap-2 rounded-xl animate-in fade-in duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex gap-4 items-center justify-center">
+          {/* CLAIM BUTTON */}
+          <button
+            onClick={() => {
+              handleClaimGoal(type);
+              setActiveGoalMenu(null);
+            }}
+            disabled={selectedCards.length === 0}
+            className="flex flex-col items-center justify-center gap-1 group text-green-400 disabled:opacity-30 disabled:cursor-not-allowed hover:text-green-300 transition-colors"
+            title="Claim Goal (Select Cards First)"
+          >
+            <div className="bg-green-900/40 p-2 rounded-full border border-green-500/50 group-hover:scale-110 transition-transform">
+              <CheckCircle size={20} />
+            </div>
+            <span className="text-[9px] font-black uppercase tracking-wider">
+              Done
+            </span>
+          </button>
+
+          {/* CHANGE BUTTON */}
+          <button
+            onClick={() => {
+              handleChangeGoal(type);
+              setActiveGoalMenu(null);
+            }}
+            disabled={gameState.goalChanged}
+            className="flex flex-col items-center justify-center gap-1 group text-purple-400 disabled:opacity-30 disabled:cursor-not-allowed hover:text-purple-300 transition-colors"
+            title="Cycle Goal"
+          >
+            <div className="bg-purple-900/40 p-2 rounded-full border border-purple-500/50 group-hover:scale-110 transition-transform">
+              <RefreshCw size={20} />
+            </div>
+            <span className="text-[9px] font-black uppercase tracking-wider">
+              Change
+            </span>
+          </button>
+        </div>
+
+        {/* INFO BUTTON */}
+        <button
+          onClick={() => {
+            setViewingGoal(goal);
+            setActiveGoalMenu(null);
+          }}
+          className="flex items-center gap-1 text-[10px] font-bold text-slate-400 hover:text-white transition-colors mt-1 bg-white/5 px-2 py-0.5 rounded-full"
+        >
+          <Info size={10} /> Details
+        </button>
+
+        {/* CLOSE MENU */}
+        <button
+          onClick={() => setActiveGoalMenu(null)}
+          className="absolute top-1 right-1 text-slate-500 hover:text-white p-1 hover:bg-white/10 rounded-full transition-colors"
+        >
+          <X size={14} />
+        </button>
+      </div>
+    );
+
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col font-sans relative overflow-x-hidden overflow-y-auto text-slate-200">
+      <div
+        className="min-h-screen bg-slate-950 flex flex-col font-sans relative overflow-x-hidden overflow-y-auto text-slate-200"
+        onClick={() => {
+          setActiveGoalMenu(null);
+          setActivePartnerId(null);
+        }}
+      >
         <FloatingBackground />
 
         {/* Info Modal */}
@@ -2421,7 +2469,8 @@ export default function TogetherGame() {
               </div>
 
               <div className="p-8 space-y-10 text-slate-300">
-                {/* Section 1: Introduction */}
+                [cite_start]
+                {/* Section 1: Introduction [cite: 410, 411, 412, 413, 414, 415, 416, 417, 418, 419] */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-3 flex items-center gap-2">
@@ -2451,10 +2500,8 @@ export default function TogetherGame() {
                     </div>
                   </div>
                 </section>
-
                 <hr className="border-slate-800" />
-
-                {/* Section 2: Turn Structure */}
+                {/* Section 2: Turn Structure - UPDATED TEXT FOR FLEXIBLE TURNS */}
                 <section>
                   <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                     <RotateCcw className="text-blue-400" /> Turn Structure
@@ -2482,12 +2529,11 @@ export default function TogetherGame() {
                         2
                       </div>
                       <h4 className="font-bold text-white text-lg mb-2">
-                        Draw (Mandatory)
+                        Actions (Any Order)
                       </h4>
                       <p className="text-sm">
-                        You <strong>MUST draw 2 cards</strong>. You can take
-                        from the face-up Market or the blind Deck in any
-                        combination.
+                        You can Draw, Trade, or Claim goals in any order. BUT
+                        you <strong>MUST draw 2 cards</strong> before passing.
                       </p>
                     </div>
 
@@ -2497,19 +2543,18 @@ export default function TogetherGame() {
                         3
                       </div>
                       <h4 className="font-bold text-white text-lg mb-2">
-                        Actions
+                        Pass
                       </h4>
                       <p className="text-sm">
-                        Perform any number of actions (Trade, Claim Goal, etc.)
-                        until you are ready to <strong>Pass</strong> the turn.
+                        Once you have drawn your 2 cards and finished your
+                        moves, <strong>Pass</strong> the turn.
                       </p>
                     </div>
                   </div>
                 </section>
-
                 <hr className="border-slate-800" />
-
-                {/* Section 3: Actions */}
+                [cite_start]
+                {/* Section 3: Actions [cite: 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447] */}
                 <section>
                   <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                     <Zap className="text-yellow-400" /> Valid Actions
@@ -2565,8 +2610,8 @@ export default function TogetherGame() {
                     </div>
                   </div>
                 </section>
-
-                {/* Section 4: Communication */}
+                [cite_start]
+                {/* Section 4: Communication [cite: 448, 449, 450, 451] */}
                 <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex gap-4 items-center">
                   <div className="bg-red-500/20 p-2 rounded-full text-red-400">
                     <AlertTriangle size={24} />
@@ -2611,13 +2656,10 @@ export default function TogetherGame() {
           <div className="flex gap-2 md:gap-4 overflow-x-auto">
             {TEAMS.map((t) => {
               if (!gameState.teamScores[t.id]) return null;
-              // --- UPDATE: Hide 3rd team if 4 player game ---
               if (gameState.players.length === 4 && t.id === "C") return null;
-
               const score = gameState.teamScores[t.id];
               const isActive = activePlayer.teamId === t.id;
               const isMyTeam = myPlayer?.teamId === t.id;
-
               return (
                 <div
                   key={t.id}
@@ -2703,20 +2745,56 @@ export default function TogetherGame() {
                 if (p.id === user.uid) return null;
                 const isTurn = gameState.turnIndex === i;
                 const pTeam = TEAMS.find((t) => t.id === p.teamId);
+                const isPartner = p.teamId === myPlayer.teamId;
+
+                // Partner Interaction Logic
+                const showPartnerInteraction =
+                  activePartnerId === p.id &&
+                  isMyTurn &&
+                  isPartner &&
+                  selectedCards.length > 0 &&
+                  selectedCards.length <= 2;
 
                 return (
                   <div
                     key={p.id}
-                    className={`flex flex-col items-center min-w-[80px] transition-all ${
+                    className={`relative flex flex-col items-center min-w-[80px] transition-all ${
                       isTurn ? "scale-105 opacity-100" : "opacity-70"
                     }`}
                   >
+                    {/* GIVE BUTTON OVERLAY */}
+                    {showPartnerInteraction && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleTrade(p.id);
+                        }}
+                        className="absolute z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white font-bold text-xs px-4 py-2 rounded-full shadow-lg hover:bg-blue-500 animate-in zoom-in duration-200 flex items-center gap-1 ring-2 ring-white"
+                      >
+                        <Gift size={14} /> GIVE
+                      </button>
+                    )}
+
                     <div
                       className={`relative w-10 h-10 rounded-full border-2 ${
                         isTurn
                           ? "border-white ring-2 ring-blue-500"
                           : pTeam.border
-                      } bg-slate-800 flex items-center justify-center font-bold text-sm shadow-md`}
+                      } bg-slate-800 flex items-center justify-center font-bold text-sm shadow-md cursor-pointer`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // If selected cards, toggle give menu for partner
+                        if (
+                          isPartner &&
+                          isMyTurn &&
+                          selectedCards.length > 0 &&
+                          selectedCards.length <= 2
+                        ) {
+                          setActivePartnerId(
+                            activePartnerId === p.id ? null : p.id
+                          );
+                        }
+                      }}
                     >
                       {p.name[0]}
                       <div
@@ -2728,12 +2806,12 @@ export default function TogetherGame() {
                         {pTeam.name.split(" ")[1]}
                       </div>
                     </div>
-                    {/* --- UPDATE: Added Player Name --- */}
+                    {/* Player Name */}
                     <span className="text-[9px] font-bold text-slate-400 mt-1 max-w-[70px] truncate">
                       {p.name}
                     </span>
 
-                    {/* Public Goal Info */}
+                    {/* Public Goal Info (Opponent) */}
                     <div className="mt-1 w-20 scale-90 origin-top">
                       <GoalCard
                         goal={p.personalGoal}
@@ -2763,8 +2841,8 @@ export default function TogetherGame() {
           </div>
 
           {/* Center Board */}
-          <div className="flex-1 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-slate-800 shadow-xl p-4 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-6 mb-4 md:mb-0">
-            {/* Turn Indicator - Replaced Absolute with Flex to avoid overlap */}
+          <div className="flex-1 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-slate-800 shadow-xl p-4 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-6 mb-4 md:mb-0 relative">
+            {/* Turn Indicator */}
             <div className="w-full md:w-auto text-center mb-2 md:mb-0">
               <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">
                 Current Turn
@@ -2777,32 +2855,42 @@ export default function TogetherGame() {
                 {isMyTurn ? "YOUR TURN" : activePlayer.name}
               </div>
               {isMyTurn && (
-                <div className="text-[10px] font-bold bg-slate-800 text-blue-400 border border-blue-900/50 px-2 py-1 rounded-full mt-1 animate-pulse inline-block shadow-lg">
+                <div className="text-[10px] font-bold bg-slate-800 text-blue-400 border border-blue-900/50 px-2 py-1 rounded-full mt-1 inline-block shadow-lg">
                   {gameState.turnPhase === "CHECK_LIMIT"
                     ? "Discard down to 6"
-                    : gameState.turnPhase === "DRAW"
-                    ? `Draw ${2 - gameState.cardsDrawn} Cards`
-                    : "Solve Goal, Trade, or Change Goal"}
+                    : gameState.cardsDrawn < 2
+                    ? `Draw ${2 - gameState.cardsDrawn} more`
+                    : "Actions or Pass"}
                 </div>
               )}
             </div>
 
             {/* Public Goal - Reduced size */}
-            <div className="w-32 h-24 md:w-48 md:h-32 flex-shrink-0">
+            <div className="relative w-32 h-24 md:w-48 md:h-32 flex-shrink-0">
               <div className="text-center text-[10px] font-bold text-slate-500 mb-1 uppercase">
                 Public Goal
               </div>
               {gameState.publicGoal ? (
-                <GoalCard
-                  goal={gameState.publicGoal}
-                  isPublic
-                  selected={
-                    selectedCards.length > 0 &&
-                    isMyTurn &&
-                    gameState.turnPhase === "ACTION"
-                  }
-                  onClick={() => setViewingGoal(gameState.publicGoal)}
-                />
+                <>
+                  <GoalCard
+                    goal={gameState.publicGoal}
+                    isPublic
+                    selected={activeGoalMenu === "PUBLIC"}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isMyTurn && gameState.turnPhase === "PLAYING") {
+                        setActiveGoalMenu(
+                          activeGoalMenu === "PUBLIC" ? null : "PUBLIC"
+                        );
+                      } else {
+                        setViewingGoal(gameState.publicGoal);
+                      }
+                    }}
+                  />
+                  {activeGoalMenu === "PUBLIC" && (
+                    <GoalOverlay type="PUBLIC" goal={gameState.publicGoal} />
+                  )}
+                </>
               ) : (
                 <div className="h-full border-2 border-dashed border-slate-700 rounded-lg flex items-center justify-center text-slate-600">
                   Empty
@@ -2818,14 +2906,23 @@ export default function TogetherGame() {
                     key={i}
                     card={c}
                     small
-                    disabled={!isMyTurn || gameState.turnPhase !== "DRAW"}
+                    // Allow drawing in PLAYING phase if limit not met
+                    disabled={
+                      !isMyTurn ||
+                      gameState.turnPhase === "CHECK_LIMIT" ||
+                      gameState.cardsDrawn >= 2
+                    }
                     onClick={() => handleDraw(i)}
                   />
                 ))}
               </div>
               <button
                 onClick={() => handleDraw(-1)}
-                disabled={!isMyTurn || gameState.turnPhase !== "DRAW"}
+                disabled={
+                  !isMyTurn ||
+                  gameState.turnPhase === "CHECK_LIMIT" ||
+                  gameState.cardsDrawn >= 2
+                }
                 className="w-full h-10 bg-slate-800 border border-slate-700 rounded-xl flex items-center justify-center gap-2 text-slate-300 text-sm font-bold hover:bg-slate-700 active:scale-95 disabled:opacity-50 transition-all shadow-lg"
               >
                 <Layers size={16} /> Draw Blind
@@ -2854,96 +2951,50 @@ export default function TogetherGame() {
               </div>
             </div>
 
-            {/* Action Bar (Floating) */}
-            {isMyTurn && gameState.turnPhase === "ACTION" && (
-              <div className="absolute -top-12 left-0 right-0 flex justify-center px-2 z-20">
-                <div className="bg-slate-800/90 backdrop-blur-md border border-slate-700 p-2 rounded-2xl flex flex-wrap justify-center gap-2 shadow-2xl max-w-full">
-                  {/* Claims Group */}
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => handleClaimGoal("PERSONAL")}
-                      disabled={selectedCards.length === 0}
-                      className="bg-pink-600 text-white px-3 py-2 rounded-lg font-bold shadow hover:bg-pink-500 disabled:opacity-50 active:scale-95 transition text-xs flex items-center gap-1"
-                    >
-                      <CheckCircle size={14} /> Mine
-                    </button>
-                    <button
-                      onClick={() => handleClaimGoal("PUBLIC")}
-                      disabled={selectedCards.length === 0}
-                      className="bg-indigo-600 text-white px-3 py-2 rounded-lg font-bold shadow hover:bg-indigo-500 disabled:opacity-50 active:scale-95 transition text-xs flex items-center gap-1"
-                    >
-                      <CheckCircle size={14} /> Public
-                    </button>
-                  </div>
-
-                  <div className="w-px bg-slate-600 mx-1"></div>
-
-                  {/* Trade */}
-                  {partner && (
-                    <button
-                      onClick={() => handleTrade(partner.id)}
-                      disabled={
-                        selectedCards.length === 0 || selectedCards.length > 2
-                      }
-                      className="bg-blue-600 text-white px-3 py-2 rounded-lg font-bold shadow hover:bg-blue-500 disabled:opacity-50 active:scale-95 transition text-xs flex items-center gap-1"
-                    >
-                      <Hand size={14} /> Give
-                    </button>
-                  )}
-
-                  <div className="w-px bg-slate-600 mx-1"></div>
-
-                  {/* Cycle Goals */}
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => handleChangeGoal("PERSONAL")}
-                      disabled={gameState.goalChanged}
-                      className={`bg-cyan-700 text-white px-3 py-2 rounded-lg font-bold shadow hover:bg-pink-600 disabled:opacity-50 active:scale-95 transition text-xs flex items-center gap-1 ${
-                        gameState.goalChanged ? "opacity-50" : ""
-                      }`}
-                      title="New Personal Goal"
-                    >
-                      <RefreshCw size={14} /> Mine
-                    </button>
-                    <button
-                      onClick={() => handleChangeGoal("PUBLIC")}
-                      disabled={gameState.goalChanged}
-                      className={`bg-yellow-600 text-white px-3 py-2 rounded-lg font-bold shadow hover:bg-indigo-600 disabled:opacity-50 active:scale-95 transition text-xs flex items-center gap-1 ${
-                        gameState.goalChanged ? "opacity-50" : ""
-                      }`}
-                      title="New Public Goal"
-                    >
-                      <RefreshCw size={14} /> Public
-                    </button>
-                  </div>
-
-                  <div className="w-px bg-slate-600 mx-1"></div>
-
-                  {/* Pass */}
-                  <button
-                    onClick={endTurn}
-                    className="bg-slate-700 text-white px-3 py-2 rounded-lg font-bold shadow hover:bg-slate-600 active:scale-95 transition text-xs"
-                  >
-                    Pass
-                  </button>
-                </div>
-              </div>
+            {/* PASS BUTTON (Replaces Action Bar) */}
+            {isMyTurn && gameState.turnPhase === "PLAYING" && (
+              <button
+                onClick={endTurn}
+                disabled={gameState.cardsDrawn < 2}
+                className="absolute top-4 right-4 bg-slate-700 text-white px-6 py-2 rounded-xl font-bold shadow hover:bg-slate-600 active:scale-95 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                PASS{" "}
+                {gameState.cardsDrawn < 2 && (
+                  <span className="text-[10px] opacity-70">
+                    (Draw {2 - gameState.cardsDrawn} more)
+                  </span>
+                )}
+                <ArrowRight size={16} />
+              </button>
             )}
 
             <div className="flex flex-col md:flex-row gap-4 items-end">
               {/* Personal Goal */}
-              <div className="w-28 h-24 md:w-36 md:h-32 shrink-0 self-center md:self-end mb-4 md:mb-0 flex flex-col gap-2">
+              <div className="relative w-28 h-24 md:w-36 md:h-32 shrink-0 self-center md:self-end mb-4 md:mb-0 flex flex-col gap-2">
                 {myPlayer.personalGoal ? (
-                  <GoalCard
-                    goal={myPlayer.personalGoal}
-                    isPersonal
-                    selected={
-                      selectedCards.length > 0 &&
-                      isMyTurn &&
-                      gameState.turnPhase === "ACTION"
-                    }
-                    onClick={() => setViewingGoal(myPlayer.personalGoal)}
-                  />
+                  <>
+                    <GoalCard
+                      goal={myPlayer.personalGoal}
+                      isPersonal
+                      selected={activeGoalMenu === "PERSONAL"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (isMyTurn && gameState.turnPhase === "PLAYING") {
+                          setActiveGoalMenu(
+                            activeGoalMenu === "PERSONAL" ? null : "PERSONAL"
+                          );
+                        } else {
+                          setViewingGoal(myPlayer.personalGoal);
+                        }
+                      }}
+                    />
+                    {activeGoalMenu === "PERSONAL" && (
+                      <GoalOverlay
+                        type="PERSONAL"
+                        goal={myPlayer.personalGoal}
+                      />
+                    )}
+                  </>
                 ) : (
                   <div className="h-full bg-slate-800 rounded-lg flex items-center justify-center text-xs text-slate-500 font-bold border-2 border-dashed border-slate-700">
                     Completed!
@@ -2951,8 +3002,8 @@ export default function TogetherGame() {
                 )}
               </div>
 
-              {/* Hand */}
-              <div className="flex-1 overflow-x-auto pb-4 pt-24 px-2 w-full min-h-[160px]">
+              {/* Hand - INCREASED PADDING TO REVEAL DISCARD BUTTON */}
+              <div className="flex-1 overflow-x-auto pb-4 pt-16 px-2 w-full min-h-[200px]">
                 <div className="flex gap-2 items-end w-fit mx-auto">
                   {myPlayer.hand
                     .sort((a, b) => a.value - b.value)
@@ -2976,10 +3027,12 @@ export default function TogetherGame() {
                               (sc) => sc.id === c.id
                             )}
                             disabled={
-                              !isMyTurn || gameState.turnPhase === "DRAW"
+                              !isMyTurn ||
+                              (gameState.turnPhase !== "PLAYING" &&
+                                gameState.turnPhase !== "CHECK_LIMIT")
                             }
                             onClick={() => {
-                              if (gameState.turnPhase === "ACTION") {
+                              if (gameState.turnPhase === "PLAYING") {
                                 if (selectedCards.some((sc) => sc.id === c.id))
                                   setSelectedCards(
                                     selectedCards.filter((sc) => sc.id !== c.id)
