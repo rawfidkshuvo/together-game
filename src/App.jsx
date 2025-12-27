@@ -1366,7 +1366,7 @@ export default function TogetherGame() {
       p.ready = false;
     });
     const deck = generateDeck();
-    const goalDeck = shuffle([...GOAL_DB, ...GOAL_DB, ...GOAL_DB]);
+    const goalDeck = shuffle([...GOAL_DB]); // Clone and shuffle, removed 3x generation
     const market = [deck.pop(), deck.pop(), deck.pop()];
     const publicGoal = goalDeck.pop();
     players.forEach((p, i) => {
