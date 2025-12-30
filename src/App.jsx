@@ -2822,8 +2822,8 @@ export default function TogetherGame() {
               onClick={() => setShowLogs(!showLogs)}
               className={`p-2 rounded-full ${
                 showLogs
-                  ? "bg-slate-800 text-white"
-                  : "text-slate-500 hover:bg-slate-800"
+                  ? "bg-pink-900 text-pink-400"
+                  : "text-gray-400 hover:bg-gray-800"
               }`}
             >
               <History size={20} />
@@ -2840,7 +2840,7 @@ export default function TogetherGame() {
 
         {/* Logs Overlay */}
         {showLogs && (
-          <div className="fixed top-16 right-4 w-72 max-h-64 bg-slate-900/95 backdrop-blur shadow-2xl rounded-xl border border-slate-700 z-[155] flex flex-col overflow-hidden">
+          <div className="fixed top-16 right-4 w-64 max-h-60 bg-gray-900/95 border border-gray-700 rounded-xl z-[155] overflow-y-auto p-2 shadow-2xl">
             <div className="bg-slate-800 p-2 text-xs font-bold text-slate-400 uppercase border-b border-slate-700">
               Game Log
             </div>
