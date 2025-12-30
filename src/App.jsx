@@ -2267,13 +2267,15 @@ export default function TogetherGame() {
         <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-8 text-center text-white font-sans relative">
           <FloatingBackground />
 
-          {/* --- MODALS (Must be included so the Top Bar buttons work) --- */}
+          {/* --- MODALS --- */}
           {showReport && (
             <ReportCard
               completedGoals={gameState.completedGoals || []}
               onClose={() => setShowReport(false)}
             />
           )}
+
+          {/* FIX: Set inGame={true} so Host sees the "Return to Lobby" button in this modal */}
           {showLeaveConfirm && (
             <LeaveConfirmModal
               onConfirmLeave={leaveRoom}
@@ -2283,26 +2285,25 @@ export default function TogetherGame() {
               }}
               onCancel={() => setShowLeaveConfirm(false)}
               isHost={isHost}
-              inGame={false} // Game is finished, so technically not "in game" logic regarding disruption
+              inGame={true}
             />
           )}
 
-          {/* --- TOP BAR (Fixed & Always on Top) --- */}
+          {/* --- TOP BAR (Fixed) --- */}
           <div className="fixed top-0 left-0 right-0 bg-slate-900 border-b border-slate-800 p-2 md:p-4 flex items-center justify-between shadow-md z-40 backdrop-blur-md bg-opacity-90">
             <div className="flex gap-2 md:gap-4 overflow-x-auto">
               {TEAMS.map((t) => {
                 if (!gameState.teamScores[t.id]) return null;
                 if (gameState.players.length === 4 && t.id === "C") return null;
                 const score = gameState.teamScores[t.id];
-                const isActive = activePlayer.teamId === t.id; // Just for styling consistency
                 const isMyTeam = myPlayer?.teamId === t.id;
                 return (
                   <div
                     key={t.id}
                     className={`flex flex-col md:flex-row items-center gap-1 md:gap-3 px-3 py-1 rounded-lg border ${
-                      isActive // Optional: keep highlighting or remove for win screen
-                        ? t.bg + " " + t.border
-                        : "bg-transparent border-transparent"
+                      myPlayer?.teamId === t.id
+                        ? t.border
+                        : "border-transparent"
                     }`}
                   >
                     <span
@@ -2319,7 +2320,6 @@ export default function TogetherGame() {
               })}
             </div>
             <div className="flex gap-2">
-              {/* Guide Button (Optional in Win Screen, but kept for consistency) */}
               <button
                 onClick={() => setShowGuide(true)}
                 className="p-2 rounded-full text-slate-500 hover:bg-slate-800"
@@ -2347,7 +2347,7 @@ export default function TogetherGame() {
             </div>
           </div>
 
-          {/* --- LOGS OVERLAY (Must be included for the button to work) --- */}
+          {/* --- LOGS OVERLAY --- */}
           {showLogs && (
             <div className="fixed top-16 md:top-20 right-4 w-72 max-h-64 bg-slate-900/95 backdrop-blur shadow-2xl rounded-xl border border-slate-700 z-50 flex flex-col overflow-hidden">
               <div className="bg-slate-800 p-2 text-xs font-bold text-slate-400 uppercase border-b border-slate-700">
@@ -2373,10 +2373,9 @@ export default function TogetherGame() {
             </div>
           )}
 
-          {/* --- GUIDE MODAL (Must be included for the button to work) --- */}
+          {/* --- GUIDE MODAL --- */}
           {showGuide && (
             <div className="fixed inset-0 bg-black/90 z-[150] flex items-center justify-center p-4 text-left">
-              {/* Simplified Guide for Win Screen context or reuse the full one */}
               <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 p-6 relative">
                 <button
                   onClick={() => setShowGuide(false)}
@@ -2384,14 +2383,15 @@ export default function TogetherGame() {
                 >
                   <X />
                 </button>
-                <h2 className="text-2xl font-bold mb-4">Game Rules</h2>
+                <h2 className="text-2xl font-bold mb-4 text-white">
+                  Game Rules
+                </h2>
                 <p className="text-slate-400">See main menu for full rules.</p>
               </div>
             </div>
           )}
 
-          {/* --- MAIN WIN CONTENT --- */}
-          {/* Added mt-20 to ensure content doesn't hide behind the fixed top bar */}
+          {/* --- MAIN CONTENT --- */}
           <div className="z-10 bg-slate-900/80 backdrop-blur p-8 rounded-3xl border border-slate-700 shadow-2xl max-w-2xl w-full mt-20">
             <Trophy
               size={80}
@@ -2429,7 +2429,6 @@ export default function TogetherGame() {
               <FileText size={20} /> View Game Report Card
             </button>
 
-            {/* Player Statuses */}
             <div className="flex flex-wrap justify-center gap-2 mb-8">
               {gameState.players.map((p) => (
                 <div
@@ -2445,6 +2444,7 @@ export default function TogetherGame() {
               ))}
             </div>
 
+            {/* Bottom Actions - Host Controls */}
             {isHost ? (
               <div className="flex gap-4">
                 <button
