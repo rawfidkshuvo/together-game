@@ -2375,7 +2375,7 @@ export default function TogetherGame() {
 
           {/* --- GUIDE MODAL --- */}
           {showGuide && (
-            <div className="fixed inset-0 bg-black/90 z-[150] flex items-center justify-center p-4 text-left">
+            <div className="fixed inset-0 bg-black/90 z-[170] flex items-center justify-center p-4 text-left">
               <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 p-6 relative">
                 <button
                   onClick={() => setShowGuide(false)}
