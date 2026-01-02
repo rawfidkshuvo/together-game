@@ -1818,7 +1818,7 @@ export default function TogetherGame() {
 
         {/* Guide Modal in Menu */}
         {showGuide && (
-          <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4">
             <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 shadow-2xl relative flex flex-col">
               {/* Header */}
               <div className="flex justify-between items-center p-6 border-b border-slate-800 bg-slate-900 sticky top-0 z-10">
@@ -2375,7 +2375,7 @@ export default function TogetherGame() {
 
           {/* --- GUIDE MODAL --- */}
           {showGuide && (
-            <div className="fixed inset-0 bg-black/90 z-[170] flex items-center justify-center p-4 text-left">
+            <div className="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4 text-left">
               <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 p-6 relative">
                 <button
                   onClick={() => setShowGuide(false)}
@@ -2576,7 +2576,7 @@ export default function TogetherGame() {
 
         {/* Guide Modal (Game) - POPULATED */}
         {showGuide && (
-          <div className="fixed inset-0 bg-black/90 z-[150] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4">
             <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 shadow-2xl relative flex flex-col">
               {/* Header */}
               <div className="flex justify-between items-center p-6 border-b border-slate-800 bg-slate-900 sticky top-0 z-10">
@@ -3084,14 +3084,14 @@ export default function TogetherGame() {
                     Current Turn
                   </div>
                   <div
-                    className={`text-lg font-black ${
+                    className={`text-lg font-black animate-bounce  ${
                       TEAMS.find((t) => t.id === activePlayer.teamId).color
                     }`}
                   >
                     {isMyTurn ? "YOUR TURN" : activePlayer.name}
                   </div>
                   {isMyTurn && (
-                    <div className="text-[10px] font-bold bg-slate-800 text-blue-400 border border-blue-900/50 px-2 py-1 rounded-full mt-1 inline-block shadow-lg">
+                    <div className="text-[10px] font-bold bg-slate-800 text-blue-400 border border-blue-900/50 px-2 py-1 rounded-full mt-1 inline-block shadow-lg animate-pulse">
                       {gameState.turnPhase === "CHECK_LIMIT"
                         ? "Discard down to 6"
                         : gameState.cardsDrawn < 2
