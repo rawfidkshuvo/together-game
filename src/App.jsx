@@ -1839,8 +1839,8 @@ export default function TogetherGame() {
               </div>
 
               <div className="p-8 space-y-10 text-slate-300">
-                [cite_start]
-                {/* Section 1: Introduction [cite: 296, 297, 298, 299, 300, 301, 302, 303, 304, 305] */}
+                
+                {/* Section 1: Introduction */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-3 flex items-center gap-2">
@@ -1923,8 +1923,8 @@ export default function TogetherGame() {
                   </div>
                 </section>
                 <hr className="border-slate-800" />
-                [cite_start]
-                {/* Section 3: Actions [cite: 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333] */}
+                
+                {/* Section 3: Actions */}
                 <section>
                   <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                     <Zap className="text-yellow-400" /> Valid Actions
@@ -1980,8 +1980,8 @@ export default function TogetherGame() {
                     </div>
                   </div>
                 </section>
-                [cite_start]
-                {/* Section 4: Communication [cite: 334, 335, 336, 337] */}
+                
+                {/* Section 4: Communication */}
                 <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex gap-4 items-center">
                   <div className="bg-red-500/20 p-2 rounded-full text-red-400">
                     <AlertTriangle size={24} />
@@ -2574,7 +2574,7 @@ export default function TogetherGame() {
           currentUserId={user.uid}
         />
 
-        {/* Guide Modal (Game) */}
+        {/* Guide Modal (Game) - POPULATED */}
         {showGuide && (
           <div className="fixed inset-0 bg-black/90 z-[150] flex items-center justify-center p-4">
             <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 shadow-2xl relative flex flex-col">
@@ -2597,8 +2597,7 @@ export default function TogetherGame() {
               </div>
 
               <div className="p-8 space-y-10 text-slate-300">
-                [cite_start]
-                {/* Section 1: Introduction [cite: 410, 411, 412, 413, 414, 415, 416, 417, 418, 419] */}
+                {/* Section 1: Introduction */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-3 flex items-center gap-2">
@@ -2681,8 +2680,7 @@ export default function TogetherGame() {
                   </div>
                 </section>
                 <hr className="border-slate-800" />
-                [cite_start]
-                {/* Section 3: Actions [cite: 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447] */}
+                {/* Section 3: Actions */}
                 <section>
                   <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
                     <Zap className="text-yellow-400" /> Valid Actions
@@ -2738,8 +2736,7 @@ export default function TogetherGame() {
                     </div>
                   </div>
                 </section>
-                [cite_start]
-                {/* Section 4: Communication [cite: 448, 449, 450, 451] */}
+                {/* Section 4: Communication */}
                 <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex gap-4 items-center">
                   <div className="bg-red-500/20 p-2 rounded-full text-red-400">
                     <AlertTriangle size={24} />
@@ -2970,28 +2967,8 @@ export default function TogetherGame() {
 
           {/* Center Board */}
           <div className="flex-1 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-slate-800 shadow-xl p-4 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-6 mb-4 md:mb-0 relative">
-            {/* Turn Indicator */}
-            <div className="w-full md:w-auto text-center mb-2 md:mb-0">
-              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">
-                Current Turn
-              </div>
-              <div
-                className={`text-lg font-black ${
-                  TEAMS.find((t) => t.id === activePlayer.teamId).color
-                }`}
-              >
-                {isMyTurn ? "YOUR TURN" : activePlayer.name}
-              </div>
-              {isMyTurn && (
-                <div className="text-[10px] font-bold bg-slate-800 text-blue-400 border border-blue-900/50 px-2 py-1 rounded-full mt-1 inline-block shadow-lg">
-                  {gameState.turnPhase === "CHECK_LIMIT"
-                    ? "Discard down to 6"
-                    : gameState.cardsDrawn < 2
-                    ? `Draw ${2 - gameState.cardsDrawn} more`
-                    : "Actions or Pass"}
-                </div>
-              )}
-            </div>
+            
+            {/* REMOVED Turn Indicator from here */}
 
             {/* Public Goal - Reduced size */}
             <div className="relative w-32 h-24 md:w-48 md:h-32 flex-shrink-0">
@@ -3098,7 +3075,33 @@ export default function TogetherGame() {
 
             <div className="flex flex-col md:flex-row gap-4 items-end">
               {/* Personal Goal */}
-              <div className="relative w-28 h-24 md:w-36 md:h-32 shrink-0 self-center md:self-end mb-4 md:mb-0 flex flex-col gap-2">
+              {/* REMOVED fixed heights here to allow the Turn indicator to stack nicely */}
+              <div className="relative w-28 md:w-36 shrink-0 self-center md:self-end mb-4 md:mb-0 flex flex-col gap-2">
+                
+                {/* --- MOVED: Turn Indicator --- */}
+                <div className="mb-2 text-center md:text-left">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">
+                    Current Turn
+                  </div>
+                  <div
+                    className={`text-lg font-black ${
+                      TEAMS.find((t) => t.id === activePlayer.teamId).color
+                    }`}
+                  >
+                    {isMyTurn ? "YOUR TURN" : activePlayer.name}
+                  </div>
+                  {isMyTurn && (
+                    <div className="text-[10px] font-bold bg-slate-800 text-blue-400 border border-blue-900/50 px-2 py-1 rounded-full mt-1 inline-block shadow-lg">
+                      {gameState.turnPhase === "CHECK_LIMIT"
+                        ? "Discard down to 6"
+                        : gameState.cardsDrawn < 2
+                        ? `Draw ${2 - gameState.cardsDrawn} more`
+                        : "Actions or Pass"}
+                    </div>
+                  )}
+                </div>
+                
+                {/* --- My Goal --- */}
                 {myPlayer.personalGoal ? (
                   <>
                     <GoalCard
