@@ -565,6 +565,15 @@ const Logo = () => (
   </div>
 );
 
+const LogoBig = () => (
+  <div className="flex items-center justify-center gap-1 opacity-40 mt-auto pb-2 pt-2 relative z-10">
+    <Handshake size={22} className="text-pink-600" />
+    <span className="text-[20px] font-black tracking-widest text-pink-600 uppercase">
+      TOGETHER
+    </span>
+  </div>
+);
+
 // --- VALIDATION ENGINE ---
 const validateGoal = (cards, goal) => {
   if (!cards || cards.length === 0) return false;
@@ -1827,7 +1836,7 @@ export default function TogetherGame() {
                     <BookOpen className="text-white" size={24} />
                   </div>
                   <h2 className="text-3xl font-black text-white tracking-tight">
-                    How to Play
+                    Code of Conduct
                   </h2>
                 </div>
                 <button
@@ -1839,7 +1848,6 @@ export default function TogetherGame() {
               </div>
 
               <div className="p-8 space-y-10 text-slate-300">
-                
                 {/* Section 1: Introduction */}
                 <section className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                   <div>
@@ -1923,7 +1931,7 @@ export default function TogetherGame() {
                   </div>
                 </section>
                 <hr className="border-slate-800" />
-                
+
                 {/* Section 3: Actions */}
                 <section>
                   <h3 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
@@ -1980,7 +1988,7 @@ export default function TogetherGame() {
                     </div>
                   </div>
                 </section>
-                
+
                 {/* Section 4: Communication */}
                 <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex gap-4 items-center">
                   <div className="bg-red-500/20 p-2 rounded-full text-red-400">
@@ -2049,7 +2057,7 @@ export default function TogetherGame() {
               disabled={loading}
               className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white p-4 rounded-xl font-black shadow-lg shadow-pink-900/20 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
-              <Crown size={20} /> CREATE ROOM
+              <Crown size={20} /> CREATE CO-OPERATION
             </button>
 
             <div className="relative">
@@ -2084,7 +2092,7 @@ export default function TogetherGame() {
             onClick={() => setShowGuide(true)}
             className="flex items-center justify-center gap-2 text-slate-500 hover:text-white transition-colors text-sm font-bold mt-2"
           >
-            <BookOpen size={16} /> How to Play
+            <BookOpen size={16} /> Code of Conduct
           </button>
         </div>
         <div className="absolute bottom-4 text-slate-600 text-xs text-center">
@@ -2121,6 +2129,7 @@ export default function TogetherGame() {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-white relative">
         <FloatingBackground />
+        <LogoBig />
         {showLeaveConfirm && (
           <LeaveConfirmModal
             onCancel={() => setShowLeaveConfirm(false)}
@@ -2136,9 +2145,9 @@ export default function TogetherGame() {
         <div className="z-10 w-full max-w-4xl bg-slate-900/90 backdrop-blur p-8 rounded-3xl border border-slate-700 shadow-2xl">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h2 className="text-4xl font-black tracking-tighter">LOBBY</h2>
+              <h2 className="text-4xl font-black tracking-tighter">Society</h2>
               <div className="flex items-center gap-2 text-slate-400 font-mono">
-                Room Code:{" "}
+                Co-ops Code:{" "}
                 <span className="text-yellow-400 font-bold bg-slate-800 px-2 py-1 rounded">
                   {gameState.roomId}
                 </span>
@@ -2235,7 +2244,7 @@ export default function TogetherGame() {
               }`}
             >
               {canStart
-                ? "START GAME"
+                ? "START TOGETHER"
                 : `WAITING FOR ${count < 4 ? "4" : "4 or 6"} PLAYERS`}
             </button>
           ) : (
@@ -2585,7 +2594,7 @@ export default function TogetherGame() {
                     <BookOpen className="text-white" size={24} />
                   </div>
                   <h2 className="text-3xl font-black text-white tracking-tight">
-                    How to Play
+                    Code of Conduct
                   </h2>
                 </div>
                 <button
@@ -2967,7 +2976,6 @@ export default function TogetherGame() {
 
           {/* Center Board */}
           <div className="flex-1 bg-slate-900/50 backdrop-blur-md rounded-3xl border border-slate-800 shadow-xl p-4 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-6 mb-4 md:mb-0 relative">
-            
             {/* REMOVED Turn Indicator from here */}
 
             {/* Public Goal - Reduced size */}
@@ -3077,7 +3085,6 @@ export default function TogetherGame() {
               {/* Personal Goal */}
               {/* REMOVED fixed heights here to allow the Turn indicator to stack nicely */}
               <div className="relative w-28 md:w-36 shrink-0 self-center md:self-end mb-4 md:mb-0 flex flex-col gap-2">
-                
                 {/* --- MOVED: Turn Indicator --- */}
                 <div className="mb-2 text-center md:text-left">
                   <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">
@@ -3100,7 +3107,7 @@ export default function TogetherGame() {
                     </div>
                   )}
                 </div>
-                
+
                 {/* --- My Goal --- */}
                 {myPlayer.personalGoal ? (
                   <>
