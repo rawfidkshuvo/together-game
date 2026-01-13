@@ -1434,15 +1434,58 @@ export default function TogetherGame() {
       const snap = await getDoc(roomRef);
       if (snap.exists()) {
         const data = snap.data();
-        // If host leaves, delete room for everyone
+        
+        // 1. HOST LEAVES: Destroy Room
         if (data.hostId === user.uid) {
           await deleteDoc(roomRef);
         } else {
+          // 2. GUEST LEAVES: Fix Index Logic
+          const leavingPlayerIndex = data.players.findIndex((p) => p.id === user.uid);
           const newPlayers = data.players.filter((p) => p.id !== user.uid);
+
           if (newPlayers.length === 0) {
             await deleteDoc(roomRef);
           } else {
-            await updateDoc(roomRef, { players: newPlayers });
+            // --- FIX START ---
+            let newTurnIndex = data.turnIndex;
+            let shouldResetTurnVars = false;
+
+            if (leavingPlayerIndex < data.turnIndex) {
+              // Someone BEFORE the active player left. Shift index down 1 to keep focus on the same player.
+              newTurnIndex = Math.max(0, data.turnIndex - 1);
+            } else if (leavingPlayerIndex === data.turnIndex) {
+              // The ACTIVE player left. The turn passes to the person who slid into this slot.
+              // We must reset turn variables so the new player doesn't inherit "2 cards drawn" state.
+              shouldResetTurnVars = true;
+            }
+
+            // Safety: If index is out of bounds (e.g., last player left), wrap to 0
+            if (newTurnIndex >= newPlayers.length) {
+              newTurnIndex = 0;
+            }
+
+            const updates = {
+              players: newPlayers,
+              turnIndex: newTurnIndex,
+              logs: arrayUnion({
+                id: Date.now(),
+                text: `${playerName} left the game.`,
+                type: "danger",
+              }),
+            };
+
+            // If the active player left, reset the turn phase for the next person
+            if (shouldResetTurnVars && newPlayers.length > 0) {
+              const nextPlayer = newPlayers[newTurnIndex];
+              updates.turnPhase =
+                nextPlayer.hand.length > 6 ? "CHECK_LIMIT" : "PLAYING";
+              updates.cardsDrawn = 0;
+              updates.tradesPerformed = 0;
+              updates.goalChanged = false;
+            }
+
+            await updateDoc(roomRef, updates);
+            // --- FIX END ---
           }
         }
       }
