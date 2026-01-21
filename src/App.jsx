@@ -3022,36 +3022,40 @@ export default function TogetherGame() {
             {/* REMOVED Turn Indicator from here */}
 
             {/* Public Goal - Reduced size */}
-            <div className="relative w-32 h-24 md:w-48 md:h-32 flex-shrink-0">
+            <div className="flex flex-col w-32 h-24 md:w-48 md:h-32 flex-shrink-0">
               <div className="text-center text-[10px] font-bold text-slate-500 mb-1 uppercase">
                 Public Goal
               </div>
-              {gameState.publicGoal ? (
-                <>
-                  <GoalCard
-                    goal={gameState.publicGoal}
-                    isPublic
-                    selected={activeGoalMenu === "PUBLIC"}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (isMyTurn && gameState.turnPhase === "PLAYING") {
-                        setActiveGoalMenu(
-                          activeGoalMenu === "PUBLIC" ? null : "PUBLIC"
-                        );
-                      } else {
-                        setViewingGoal(gameState.publicGoal);
-                      }
-                    }}
-                  />
-                  {activeGoalMenu === "PUBLIC" && (
-                    <GoalOverlay type="PUBLIC" goal={gameState.publicGoal} />
-                  )}
-                </>
-              ) : (
-                <div className="h-full border-2 border-dashed border-slate-700 rounded-lg flex items-center justify-center text-slate-600">
-                  Empty
-                </div>
-              )}
+              
+              {/* WRAPPER FIX: relative is now here, not on the parent */}
+              <div className="relative flex-1 w-full h-full"> 
+                {gameState.publicGoal ? (
+                  <>
+                    <GoalCard
+                      goal={gameState.publicGoal}
+                      isPublic
+                      selected={activeGoalMenu === "PUBLIC"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (isMyTurn && gameState.turnPhase === "PLAYING") {
+                          setActiveGoalMenu(
+                            activeGoalMenu === "PUBLIC" ? null : "PUBLIC"
+                          );
+                        } else {
+                          setViewingGoal(gameState.publicGoal);
+                        }
+                      }}
+                    />
+                    {activeGoalMenu === "PUBLIC" && (
+                      <GoalOverlay type="PUBLIC" goal={gameState.publicGoal} />
+                    )}
+                  </>
+                ) : (
+                  <div className="h-full border-2 border-dashed border-slate-700 rounded-lg flex items-center justify-center text-slate-600">
+                    Empty
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Market & Deck */}
@@ -3152,35 +3156,38 @@ export default function TogetherGame() {
                 </div>
 
                 {/* --- My Goal --- */}
-                {myPlayer.personalGoal ? (
-                  <>
-                    <GoalCard
-                      goal={myPlayer.personalGoal}
-                      isPersonal
-                      selected={activeGoalMenu === "PERSONAL"}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (isMyTurn && gameState.turnPhase === "PLAYING") {
-                          setActiveGoalMenu(
-                            activeGoalMenu === "PERSONAL" ? null : "PERSONAL"
-                          );
-                        } else {
-                          setViewingGoal(myPlayer.personalGoal);
-                        }
-                      }}
-                    />
-                    {activeGoalMenu === "PERSONAL" && (
-                      <GoalOverlay
-                        type="PERSONAL"
+                {/* WRAPPER FIX: Added a relative div to constrain the overlay only to the card */}
+                <div className="relative w-full flex-1 min-h-[100px]">
+                  {myPlayer.personalGoal ? (
+                    <>
+                      <GoalCard
                         goal={myPlayer.personalGoal}
+                        isPersonal
+                        selected={activeGoalMenu === "PERSONAL"}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isMyTurn && gameState.turnPhase === "PLAYING") {
+                            setActiveGoalMenu(
+                              activeGoalMenu === "PERSONAL" ? null : "PERSONAL"
+                            );
+                          } else {
+                            setViewingGoal(myPlayer.personalGoal);
+                          }
+                        }}
                       />
-                    )}
-                  </>
-                ) : (
-                  <div className="h-full bg-slate-800 rounded-lg flex items-center justify-center text-xs text-slate-500 font-bold border-2 border-dashed border-slate-700">
-                    Completed!
-                  </div>
-                )}
+                      {activeGoalMenu === "PERSONAL" && (
+                        <GoalOverlay
+                          type="PERSONAL"
+                          goal={myPlayer.personalGoal}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <div className="h-full bg-slate-800 rounded-lg flex items-center justify-center text-xs text-slate-500 font-bold border-2 border-dashed border-slate-700">
+                      Completed!
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Hand - INCREASED PADDING TO REVEAL DISCARD BUTTON */}
