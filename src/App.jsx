@@ -64,7 +64,7 @@ const db = getFirestore(app);
 
 const APP_ID = typeof __app_id !== "undefined" ? __app_id : "together-game";
 const GAME_ID = "23";
-const LS_ROOM_KEY = "together_game_roomId";
+const TG_ROOM_KEY = "together_game_roomId";
 
 // --- Constants ---
 
@@ -1194,11 +1194,13 @@ const GoalCard = ({
 export default function TogetherGame() {
   const [user, setUser] = useState(null);
   const [view, setView] = useState("menu");
-  const [playerName, setPlayerName] = useState("");
+  const [playerName, setPlayerName] = useState(
+    () => localStorage.getItem("together_playerName") || ""
+  );
   const [roomCodeInput, setRoomCodeInput] = useState("");
   // Initialize roomId from localStorage if available to persist session
   const [roomId, setRoomId] = useState(
-    () => localStorage.getItem(LS_ROOM_KEY) || ""
+    () => localStorage.getItem(TG_ROOM_KEY) || ""
   );
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState("");
@@ -1233,6 +1235,10 @@ export default function TogetherGame() {
   }, []);
 
   useEffect(() => {
+    if (playerName) localStorage.setItem("together_playerName", playerName);
+  }, [playerName]);
+
+  useEffect(() => {
     const unsub = onSnapshot(doc(db, "game_hub_settings", "config"), (doc) => {
       if (doc.exists() && doc.data()[GAME_ID]?.maintenance)
         setIsMaintenance(true);
@@ -1251,7 +1257,7 @@ export default function TogetherGame() {
           const data = snap.data();
           if (!data.players.some((p) => p.id === user.uid)) {
             setRoomId("");
-            localStorage.removeItem(LS_ROOM_KEY);
+            localStorage.removeItem(TG_ROOM_KEY);
             setView("menu");
             setError("You were removed.");
             return;
@@ -1269,7 +1275,7 @@ export default function TogetherGame() {
           }
         } else {
           setRoomId("");
-          localStorage.removeItem(LS_ROOM_KEY);
+          localStorage.removeItem(TG_ROOM_KEY);
           setView("menu");
           setError("Room ended.");
         }
@@ -1311,7 +1317,7 @@ export default function TogetherGame() {
       initialData
     );
     setRoomId(newId);
-    localStorage.setItem(LS_ROOM_KEY, newId);
+    localStorage.setItem(TG_ROOM_KEY, newId);
     setView("lobby");
     setLoading(false);
   };
@@ -1355,7 +1361,7 @@ export default function TogetherGame() {
     ];
     await updateDoc(ref, { players: newPlayers });
     setRoomId(roomCodeInput);
-    localStorage.setItem(LS_ROOM_KEY, roomCodeInput);
+    localStorage.setItem(TG_ROOM_KEY, roomCodeInput);
     setLoading(false);
   };
 
@@ -1495,7 +1501,7 @@ export default function TogetherGame() {
       console.error("Error leaving room", e);
     }
     setRoomId("");
-    localStorage.removeItem(LS_ROOM_KEY);
+    localStorage.removeItem(TG_ROOM_KEY);
     setView("menu");
     setGameState(null);
     setShowLeaveConfirm(false);
