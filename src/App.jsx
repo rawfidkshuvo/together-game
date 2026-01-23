@@ -1194,9 +1194,7 @@ const GoalCard = ({
 export default function TogetherGame() {
   const [user, setUser] = useState(null);
   const [view, setView] = useState("menu");
-  const [playerName, setPlayerName] = useState(
-    () => localStorage.getItem("together_playerName") || ""
-  );
+  
   const [roomCodeInput, setRoomCodeInput] = useState("");
   // Initialize roomId from localStorage if available to persist session
   const [roomId, setRoomId] = useState(
@@ -1221,6 +1219,15 @@ export default function TogetherGame() {
   const [activeGoalMenu, setActiveGoalMenu] = useState(null); // 'PERSONAL' | 'PUBLIC' | null
   const [activePartnerId, setActivePartnerId] = useState(null); // ID of partner clicked
 
+  //read and fill global name
+  const [playerName, setPlayerName] = useState(
+    () => localStorage.getItem("gameHub_playerName") || ""
+  );
+  //set global name for all game
+  useEffect(() => {
+    if (playerName) localStorage.setItem("gameHub_playerName", playerName);
+  }, [playerName]);
+
   // Auth Init
   useEffect(() => {
     const initAuth = async () => {
@@ -1234,9 +1241,7 @@ export default function TogetherGame() {
     onAuthStateChanged(auth, setUser);
   }, []);
 
-  useEffect(() => {
-    if (playerName) localStorage.setItem("together_playerName", playerName);
-  }, [playerName]);
+  
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "game_hub_settings", "config"), (doc) => {
