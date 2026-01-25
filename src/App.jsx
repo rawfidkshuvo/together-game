@@ -756,9 +756,9 @@ const validateGoal = (cards, goal) => {
 
 const FloatingBackground = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black" />
-    <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-pink-600/10 rounded-full blur-3xl animate-pulse" />
-    <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-yellow-400/10 rounded-full blur-3xl animate-pulse delay-700" />
+    <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black" />
+    <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-pink-600/50 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-yellow-400/50 rounded-full blur-3xl animate-pulse delay-700" />
   </div>
 );
 
@@ -864,7 +864,7 @@ const EventModal = ({ event, onClose, currentUserId }) => {
   }
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-in fade-in duration-300 pointer-events-none">
+    <div className="fixed inset-0 z-200 flex items-center justify-center p-4 animate-in fade-in duration-300 pointer-events-none">
       <div className="bg-slate-900/95 border-2 border-slate-700 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative pointer-events-auto transform transition-all scale-100">
         <button
           onClick={onClose}
@@ -897,7 +897,7 @@ const LeaveConfirmModal = ({
   isHost,
   inGame,
 }) => (
-  <div className="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center p-4 animate-in fade-in duration-200">
+  <div className="fixed inset-0 z-200 bg-black/90 flex items-center justify-center p-4 animate-in fade-in duration-200">
     <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl">
       <AlertTriangle className="mx-auto text-red-500 mb-4" size={48} />
       <h3 className="text-xl font-bold text-white mb-2">Leave Game?</h3>
@@ -935,7 +935,7 @@ const LeaveConfirmModal = ({
 
 const InfoModal = ({ goal, onClose }) => (
   <div
-    className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 animate-in fade-in duration-200"
+    className="fixed inset-0 z-100 bg-black/80 flex items-center justify-center p-4 animate-in fade-in duration-200"
     onClick={onClose}
   >
     <div
@@ -986,7 +986,7 @@ const ReportCard = ({ completedGoals, onClose }) => {
     a.teamId.localeCompare(b.teamId)
   );
   return (
-    <div className="fixed inset-0 z-[200] bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-200 bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200">
       <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl">
         <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-800/50 rounded-t-2xl">
           <div className="flex items-center gap-3">
@@ -1883,7 +1883,7 @@ export default function TogetherGame() {
 
         {/* Guide Modal in Menu */}
         {showGuide && (
-          <div className="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/90 z-200 flex items-center justify-center p-4">
             <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 shadow-2xl relative flex flex-col">
               {/* Header */}
               <div className="flex justify-between items-center p-6 border-b border-slate-800 bg-slate-900 sticky top-0 z-10">
@@ -2111,7 +2111,7 @@ export default function TogetherGame() {
             <button
               onClick={createRoom}
               disabled={loading}
-              className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white p-4 rounded-xl font-black shadow-lg shadow-pink-900/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+              className="w-full bg-linear-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white p-4 rounded-xl font-black shadow-lg shadow-pink-900/20 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
               <Crown size={20} /> CREATE CO-OPERATION
             </button>
@@ -2440,7 +2440,7 @@ export default function TogetherGame() {
 
           {/* --- GUIDE MODAL --- */}
           {showGuide && (
-            <div className="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4 text-left">
+            <div className="fixed inset-0 bg-black/90 z-200 flex items-center justify-center p-4 text-left">
               <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 p-6 relative">
                 <button
                   onClick={() => setShowGuide(false)}
@@ -2641,7 +2641,7 @@ export default function TogetherGame() {
 
         {/* Guide Modal (Game) - POPULATED */}
         {showGuide && (
-          <div className="fixed inset-0 bg-black/90 z-[200] flex items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/90 z-200 flex items-center justify-center p-4">
             <div className="bg-slate-900 max-w-3xl w-full max-h-[85vh] overflow-y-auto rounded-2xl border border-slate-700 shadow-2xl relative flex flex-col">
               {/* Header */}
               <div className="flex justify-between items-center p-6 border-b border-slate-800 bg-slate-900 sticky top-0 z-10">
@@ -2842,7 +2842,7 @@ export default function TogetherGame() {
         )}
 
         {/* Top Bar: Scores */}
-        <div className="bg-slate-900 border-b border-slate-800 p-2 md:p-4 flex items-center justify-between shadow-md z-[160] sticky top-0 backdrop-blur-md bg-opacity-90">
+        <div className="bg-slate-900 border-b border-slate-800 p-2 md:p-4 flex items-center justify-between shadow-md z-160 sticky top-0 backdrop-blur-md bg-opacity-90">
           <div className="flex gap-2 md:gap-4 overflow-x-auto">
             {TEAMS.map((t) => {
               if (!gameState.teamScores[t.id]) return null;
@@ -2902,7 +2902,7 @@ export default function TogetherGame() {
 
         {/* Logs Overlay */}
         {showLogs && (
-          <div className="fixed top-16 right-4 w-64 max-h-60 bg-gray-900/95 border border-gray-700 rounded-xl z-[155] overflow-y-auto p-2 shadow-2xl">
+          <div className="fixed top-16 right-4 w-64 max-h-60 bg-gray-900/95 border border-gray-700 rounded-xl z-155 overflow-y-auto p-2 shadow-2xl">
             <div className="bg-slate-800 p-2 text-xs font-bold text-slate-400 uppercase border-b border-slate-700">
               Game Log
             </div>
@@ -3035,7 +3035,7 @@ export default function TogetherGame() {
             {/* REMOVED Turn Indicator from here */}
 
             {/* Public Goal - Reduced size */}
-            <div className="flex flex-col w-32 h-24 md:w-48 md:h-32 flex-shrink-0">
+            <div className="flex flex-col w-32 h-24 md:w-48 md:h-32 shrink-0">
               <div className="text-center text-[10px] font-bold text-slate-500 mb-1 uppercase">
                 Public Goal
               </div>
