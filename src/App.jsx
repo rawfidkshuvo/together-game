@@ -174,7 +174,7 @@ const GOAL_DB = [
     text: "Arithmetic Pair",
     points: 3, // LOWERED from 4. It's just 2 cards.
     type: "ARITHMETIC_PAIR",
-    desc: "Collect a Lemon card (X) and a Magenta card (Y) where Y is exactly 3 more than X.",
+    desc: "Collect a Lemon card (X) and a Magenta card (Y) where (Y = X + 3).",
   },
   {
     id: "two_pairs",
@@ -196,7 +196,7 @@ const GOAL_DB = [
   },
   {
     id: "run_3_blue",
-    text: "Lemon Run of 3",
+    text: "Lemon Run",
     points: 3,
     type: "RUN",
     count: 3,
@@ -205,7 +205,7 @@ const GOAL_DB = [
   },
   {
     id: "set_6s",
-    text: "Set of 6s",
+    text: "Set of 6's",
     points: 3, // Specific number set is harder than generic set.
     type: "EXACT_SET",
     val: 6,
@@ -252,7 +252,7 @@ const GOAL_DB = [
   },
   {
     id: "run_low",
-    text: "Low Run (1-4)",
+    text: "Low Run",
     points: 4, // BUMPED from 3. Specific sequence is harder than generic.
     type: "EXACT_SEQ",
     seq: [1, 2, 3, 4],
@@ -260,7 +260,7 @@ const GOAL_DB = [
   },
   {
     id: "run_high",
-    text: "High Run (5-8)",
+    text: "High Run",
     points: 4, // BUMPED from 3.
     type: "EXACT_SEQ",
     seq: [5, 6, 7, 8],
@@ -268,7 +268,7 @@ const GOAL_DB = [
   },
   {
     id: "run_odd",
-    text: "Odd Run (3-5-7)",
+    text: "Odd Run",
     points: 4,
     type: "EXACT_SEQ",
     seq: [3, 5, 7],
@@ -287,7 +287,7 @@ const GOAL_DB = [
     text: "Full House",
     points: 4,
     type: "FULL_HOUSE",
-    desc: "Collect a Set of 3 plus a Pair (e.g., three 5s and two 8s).",
+    desc: "Collect a Set of 3 and a Pair (e.g., three 5s and two 8s).",
   },
   {
     id: "mixed_pair",
@@ -361,11 +361,11 @@ const GOAL_DB = [
     text: "Doubler",
     points: 4,
     type: "DOUBLER_SUM",
-    desc: "Collect 3 cards where two of the same color add up to the number on the third card.",
+    desc: "Collect 3 cards where two of the same color add up to the number on the other color card.",
   },
   {
     id: "blue_low",
-    text: "Lemon Low (1-4)",
+    text: "Lemon Low",
     points: 4,
     type: "COLOR_RANGE",
     count: 4,
@@ -375,7 +375,7 @@ const GOAL_DB = [
   },
   {
     id: "mag_high",
-    text: "Magenta High (5-8)",
+    text: "Magenta High",
     points: 4,
     type: "COLOR_RANGE",
     count: 4,
@@ -385,7 +385,7 @@ const GOAL_DB = [
   },
   {
     id: "tri_color_set_3",
-    text: "Tri-Color Set (3s)",
+    text: "Color Set (3's)",
     points: 4,
     type: "SPECIFIC_SET_MIXED",
     val: 3,
@@ -395,7 +395,7 @@ const GOAL_DB = [
   },
   {
     id: "sum_12_tri",
-    text: "Tri-Sum 12",
+    text: "Unique Sum 12",
     points: 4, // LOWERED from 5. Many combos exist (1+3+8, 1+4+7, etc).
     type: "SUM_DIFF",
     count: 3,
@@ -433,7 +433,7 @@ const GOAL_DB = [
   },
   {
     id: "four_sum_28",
-    text: "Sum 28 (Four 7s)",
+    text: "Four 7s",
     points: 5, // RENAMED. Lowered from 6. Effectively "Four 7s".
     type: "EXACT_SET",
     val: 7,
@@ -484,7 +484,7 @@ const GOAL_DB = [
   },
   {
     id: "max_min",
-    text: "Max/Min",
+    text: "Max/Min Pairs",
     points: 5, // LOWERED from 6. Same difficulty as High Pairs.
     type: "SPECIFIC_PAIRS",
     vals: [1, 8],
@@ -492,7 +492,7 @@ const GOAL_DB = [
   },
   {
     id: "blue_even_run",
-    text: "Lemon-Even Run",
+    text: "Lemon Even Run",
     points: 5, // LOWERED from 6. 3 cards is hard, but not 6-points hard.
     type: "RUN_COLOR_PARITY",
     color: "L",
@@ -501,7 +501,7 @@ const GOAL_DB = [
   },
   {
     id: "mag_odd_set",
-    text: "Magenta-Odd Set",
+    text: "Magenta Odd Set",
     points: 5,
     type: "SET_PARITY_COLOR",
     count: 3,
@@ -514,7 +514,7 @@ const GOAL_DB = [
   // Extremely specific requirements.
   {
     id: "all_four_7s",
-    text: "Perfect Four 7s",
+    text: "Four Split color 7s",
     points: 6, // BUMPED from 5. Harder than generic Four 7s.
     type: "ALL_FOUR_7S",
     desc: "Collect four 7s: exactly two must be Lemon and two must be Magenta.",
