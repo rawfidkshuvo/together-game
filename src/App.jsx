@@ -757,8 +757,8 @@ const validateGoal = (cards, goal) => {
 const FloatingBackground = () => (
   <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
     <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black" />
-    <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-pink-600/50 rounded-full blur-3xl animate-pulse" />
-    <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-yellow-400/50 rounded-full blur-3xl animate-pulse delay-700" />
+    <div className="absolute top-[-10%] right-[-10%] w-96 h-96 bg-pink-600/30 rounded-full blur-3xl animate-pulse" />
+    <div className="absolute bottom-[-10%] left-[-10%] w-96 h-96 bg-yellow-400/30 rounded-full blur-3xl animate-pulse delay-700" />
   </div>
 );
 
