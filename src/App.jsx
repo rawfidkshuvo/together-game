@@ -1417,7 +1417,7 @@ export default function TogetherGame() {
         market,
         goalDeck,
         publicGoal,
-        turnIndex: 2,
+        turnIndex: 0,
         turnPhase: initialPhase, // Set based on hand size
         cardsDrawn: 0,
         tradesPerformed: 0,
