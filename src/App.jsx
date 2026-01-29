@@ -46,6 +46,7 @@ import {
   Hammer,
   Loader,
   Handshake,
+  Copy,
 } from "lucide-react";
 
 // --- Firebase Config ---
@@ -55,7 +56,7 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
@@ -983,7 +984,7 @@ const InfoModal = ({ goal, onClose }) => (
 const ReportCard = ({ completedGoals, onClose }) => {
   // Sort goals by team
   const sortedGoals = [...completedGoals].sort((a, b) =>
-    a.teamId.localeCompare(b.teamId)
+    a.teamId.localeCompare(b.teamId),
   );
   return (
     <div className="fixed inset-0 z-200 bg-black/95 flex items-center justify-center p-4 animate-in fade-in duration-200">
@@ -1135,8 +1136,8 @@ const GoalCard = ({
         completed
           ? "bg-green-900/40 border-green-500 opacity-60"
           : isPublic
-          ? "bg-indigo-900/60 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]"
-          : "bg-slate-800 border-slate-600"
+            ? "bg-indigo-900/60 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+            : "bg-slate-800 border-slate-600"
       }
       ${selected ? "ring-2 ring-white scale-105 z-20" : ""}
       ${
@@ -1194,11 +1195,11 @@ const GoalCard = ({
 export default function TogetherGame() {
   const [user, setUser] = useState(null);
   const [view, setView] = useState("menu");
-  
+
   const [roomCodeInput, setRoomCodeInput] = useState("");
   // Initialize roomId from localStorage if available to persist session
   const [roomId, setRoomId] = useState(
-    () => localStorage.getItem(TG_ROOM_KEY) || ""
+    () => localStorage.getItem(TG_ROOM_KEY) || "",
   );
   const [gameState, setGameState] = useState(null);
   const [error, setError] = useState("");
@@ -1221,7 +1222,7 @@ export default function TogetherGame() {
 
   //read and fill global name
   const [playerName, setPlayerName] = useState(
-    () => localStorage.getItem("gameHub_playerName") || ""
+    () => localStorage.getItem("gameHub_playerName") || "",
   );
   //set global name for all game
   useEffect(() => {
@@ -1240,8 +1241,6 @@ export default function TogetherGame() {
     initAuth();
     onAuthStateChanged(auth, setUser);
   }, []);
-
-  
 
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "game_hub_settings", "config"), (doc) => {
@@ -1284,7 +1283,7 @@ export default function TogetherGame() {
           setView("menu");
           setError("Room ended.");
         }
-      }
+      },
     );
     return () => unsub();
   }, [roomId, user, lastProcessedEventId]);
@@ -1294,11 +1293,11 @@ export default function TogetherGame() {
   const toggleReady = async () => {
     if (!gameState || !user) return;
     const updatedPlayers = gameState.players.map((p) =>
-      p.id === user.uid ? { ...p, ready: !p.ready } : p
+      p.id === user.uid ? { ...p, ready: !p.ready } : p,
     );
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
-      { players: updatedPlayers }
+      { players: updatedPlayers },
     );
   };
 
@@ -1319,7 +1318,7 @@ export default function TogetherGame() {
     };
     await setDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", newId),
-      initialData
+      initialData,
     );
     setRoomId(newId);
     localStorage.setItem(TG_ROOM_KEY, newId);
@@ -1337,7 +1336,7 @@ export default function TogetherGame() {
       "public",
       "data",
       "rooms",
-      roomCodeInput
+      roomCodeInput,
     );
     const snap = await getDoc(ref);
     if (!snap.exists()) {
@@ -1368,6 +1367,21 @@ export default function TogetherGame() {
     setRoomId(roomCodeInput);
     localStorage.setItem(TG_ROOM_KEY, roomCodeInput);
     setLoading(false);
+  };
+
+  const copyToClipboard = () => {
+    try {
+      navigator.clipboard.writeText(roomId);
+      triggerFeedback("neutral", "COPIED!", "", CheckCircle);
+    } catch (e) {
+      const el = document.createElement("textarea");
+      el.value = roomId;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+      triggerFeedback("neutral", "COPIED!", "", CheckCircle);
+    }
   };
 
   const startGame = async () => {
@@ -1428,7 +1442,7 @@ export default function TogetherGame() {
         logs: [
           { id: Date.now(), text: "Game Started! Good Luck.", type: "neutral" },
         ],
-      }
+      },
     );
   };
 
@@ -1441,19 +1455,21 @@ export default function TogetherGame() {
       "public",
       "data",
       "rooms",
-      roomId
+      roomId,
     );
     try {
       const snap = await getDoc(roomRef);
       if (snap.exists()) {
         const data = snap.data();
-        
+
         // 1. HOST LEAVES: Destroy Room
         if (data.hostId === user.uid) {
           await deleteDoc(roomRef);
         } else {
           // 2. GUEST LEAVES: Fix Index Logic
-          const leavingPlayerIndex = data.players.findIndex((p) => p.id === user.uid);
+          const leavingPlayerIndex = data.players.findIndex(
+            (p) => p.id === user.uid,
+          );
           const newPlayers = data.players.filter((p) => p.id !== user.uid);
 
           if (newPlayers.length === 0) {
@@ -1535,7 +1551,7 @@ export default function TogetherGame() {
         completedGoals: [],
         turnIndex: 0,
         lastEvent: null,
-      }
+      },
     );
     setShowLeaveConfirm(false);
   };
@@ -1549,7 +1565,7 @@ export default function TogetherGame() {
     const players = gameState.players.filter((p) => p.id !== pid);
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
-      { players }
+      { players },
     );
   };
 
@@ -1577,7 +1593,7 @@ export default function TogetherGame() {
     });
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
-      updates
+      updates,
     );
   };
 
@@ -1621,7 +1637,7 @@ export default function TogetherGame() {
 
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
-      updates
+      updates,
     );
   };
 
@@ -1676,7 +1692,7 @@ export default function TogetherGame() {
     };
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
-      updates
+      updates,
     );
   };
 
@@ -1698,7 +1714,7 @@ export default function TogetherGame() {
     };
     const usedIds = selectedCards.map((c) => c.id);
     updates.players[pIndex].hand = p.hand.filter(
-      (c) => !usedIds.includes(c.id)
+      (c) => !usedIds.includes(c.id),
     );
     // RECYCLE: Used cards go to bottom of deck
     updates.deck = [...selectedCards, ...updates.deck];
@@ -1751,7 +1767,7 @@ export default function TogetherGame() {
 
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
-      updates
+      updates,
     );
   };
 
@@ -1776,7 +1792,7 @@ export default function TogetherGame() {
     const updates = { players: [...gameState.players] };
     const tradeIds = selectedCards.map((c) => c.id);
     updates.players[pIndex].hand = updates.players[pIndex].hand.filter(
-      (c) => !tradeIds.includes(c.id)
+      (c) => !tradeIds.includes(c.id),
     );
     updates.players[partnerIdx].hand.push(...selectedCards);
 
@@ -1807,7 +1823,7 @@ export default function TogetherGame() {
 
     await updateDoc(
       doc(db, "artifacts", APP_ID, "public", "data", "rooms", roomId),
-      updates
+      updates,
     );
   };
 
@@ -1837,7 +1853,7 @@ export default function TogetherGame() {
           text: `Turn passed to ${nextPlayer.name}`,
           type: "neutral",
         }),
-      }
+      },
     );
   };
 
@@ -2174,7 +2190,7 @@ export default function TogetherGame() {
   const myPlayer = gameState?.players.find((p) => p.id === user?.uid);
   const myTeam = TEAMS.find((t) => t.id === myPlayer?.teamId);
   const partner = gameState?.players.find(
-    (p) => p.teamId === myPlayer?.teamId && p.id !== user?.uid
+    (p) => p.teamId === myPlayer?.teamId && p.id !== user?.uid,
   );
 
   if (view === "lobby" && gameState) {
@@ -2202,11 +2218,21 @@ export default function TogetherGame() {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h2 className="text-4xl font-black tracking-tighter">Society</h2>
-              <div className="flex items-center gap-2 text-slate-400 font-mono">
-                Co-ops Code:{" "}
-                <span className="text-yellow-400 font-bold bg-slate-800 px-2 py-1 rounded">
-                  {gameState.roomId}
-                </span>
+              {/* Grouping Title and Copy Button together on the left */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-slate-400 font-mono">
+                  Co-ops Code:{" "}
+                  <span className="text-yellow-400 font-bold bg-slate-800 px-2 py-1 rounded">
+                    {gameState.roomId}
+                  </span>
+                </div>
+                <button
+                  onClick={copyToClipboard}
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors text-gray-400 hover:text-white"
+                  title="Copy Room ID"
+                >
+                  <Copy size={16} />
+                </button>
               </div>
             </div>
             <button
@@ -2226,10 +2252,10 @@ export default function TogetherGame() {
                     ? "A"
                     : "B"
                   : i % 3 === 0
-                  ? "A"
-                  : i % 3 === 1
-                  ? "B"
-                  : "C";
+                    ? "A"
+                    : i % 3 === 1
+                      ? "B"
+                      : "C";
               const team = TEAMS.find((t) => t.id === teamId);
 
               return (
@@ -2324,7 +2350,7 @@ export default function TogetherGame() {
     // Win Screen
     if (gameState.status === "finished") {
       const winnerId = Object.keys(gameState.teamScores).reduce((a, b) =>
-        gameState.teamScores[a].points > gameState.teamScores[b].points ? a : b
+        gameState.teamScores[a].points > gameState.teamScores[b].points ? a : b,
       );
       const winnerTeam = TEAMS.find((t) => t.id === winnerId);
 
@@ -2981,7 +3007,7 @@ export default function TogetherGame() {
                           selectedCards.length <= 2
                         ) {
                           setActivePartnerId(
-                            activePartnerId === p.id ? null : p.id
+                            activePartnerId === p.id ? null : p.id,
                           );
                         }
                       }}
@@ -2990,7 +3016,7 @@ export default function TogetherGame() {
                       <div
                         className={`absolute -bottom-1 px-1.5 py-0.5 rounded text-[7px] font-black uppercase text-white ${pTeam.bg.replace(
                           "/30",
-                          ""
+                          "",
                         )}`}
                       >
                         {pTeam.name.split(" ")[1]}
@@ -3018,7 +3044,7 @@ export default function TogetherGame() {
                             key={i}
                             className="w-2.5 h-3 bg-slate-700 rounded border border-slate-500"
                           />
-                        )
+                        ),
                       )}
                       {p.hand.length > 5 && (
                         <div className="w-2.5 h-3 bg-red-500 rounded border border-slate-500" />
@@ -3039,9 +3065,9 @@ export default function TogetherGame() {
               <div className="text-center text-[10px] font-bold text-slate-500 mb-1 uppercase">
                 Public Goal
               </div>
-              
+
               {/* WRAPPER FIX: relative is now here, not on the parent */}
-              <div className="relative flex-1 w-full h-full"> 
+              <div className="relative flex-1 w-full h-full">
                 {gameState.publicGoal ? (
                   <>
                     <GoalCard
@@ -3052,7 +3078,7 @@ export default function TogetherGame() {
                         e.stopPropagation();
                         if (isMyTurn && gameState.turnPhase === "PLAYING") {
                           setActiveGoalMenu(
-                            activeGoalMenu === "PUBLIC" ? null : "PUBLIC"
+                            activeGoalMenu === "PUBLIC" ? null : "PUBLIC",
                           );
                         } else {
                           setViewingGoal(gameState.publicGoal);
@@ -3162,8 +3188,8 @@ export default function TogetherGame() {
                       {gameState.turnPhase === "CHECK_LIMIT"
                         ? "Discard down to 6"
                         : gameState.cardsDrawn < 2
-                        ? `Draw ${2 - gameState.cardsDrawn} more`
-                        : "Actions or Pass"}
+                          ? `Draw ${2 - gameState.cardsDrawn} more`
+                          : "Actions or Pass"}
                     </div>
                   )}
                 </div>
@@ -3181,7 +3207,7 @@ export default function TogetherGame() {
                           e.stopPropagation();
                           if (isMyTurn && gameState.turnPhase === "PLAYING") {
                             setActiveGoalMenu(
-                              activeGoalMenu === "PERSONAL" ? null : "PERSONAL"
+                              activeGoalMenu === "PERSONAL" ? null : "PERSONAL",
                             );
                           } else {
                             setViewingGoal(myPlayer.personalGoal);
@@ -3225,7 +3251,7 @@ export default function TogetherGame() {
                           <Card
                             card={c}
                             selected={selectedCards.some(
-                              (sc) => sc.id === c.id
+                              (sc) => sc.id === c.id,
                             )}
                             disabled={
                               !isMyTurn ||
@@ -3236,7 +3262,9 @@ export default function TogetherGame() {
                               if (gameState.turnPhase === "PLAYING") {
                                 if (selectedCards.some((sc) => sc.id === c.id))
                                   setSelectedCards(
-                                    selectedCards.filter((sc) => sc.id !== c.id)
+                                    selectedCards.filter(
+                                      (sc) => sc.id !== c.id,
+                                    ),
                                   );
                                 else setSelectedCards([...selectedCards, c]);
                               }
